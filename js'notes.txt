@@ -1,0 +1,241 @@
+https://cnodejs.org/topic/5a72c66ace45d440451465c3  node入门及进阶视频
+https://www.jianshu.com/p/7241f7c83f4a   Mac安装mongodb
+
+事件bug
+    mouseout和mouseleave事件
+    mouseout:当鼠标移动到子元素上时，也会触发移出事件
+    mouseleave:当鼠标移出该元素以及该元素的子元素时，才会触发移出事件
+
+基本数据类型
+    字符串、数字、布尔、Null、Undefined
+
+引用类型
+    object、function、array
+
+常用api
+    ①NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
+        num 0~20之间，包括0和20
+
+    ②str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
+        startIndex开始位置下标，endIndex结束位置下标，截取字符串不包括结束位置的字符
+
+    ③str.splice(startIndex,length[,item1,item2,item3,item4]); 向数组中添加&删除元素，改变原变量
+        startIndex开始位置下标[包括开始位置的字符],length删除长度，item1~item4向数组中添加的元素
+
+    ④str.split('symbol');
+        以symbol为分隔符将str变成数组，改变原数据
+        
+    ⑤Math.floor(number);  向下取整 25.6=>25
+
+    ⑥Math.round(number);  四舍五入 25.6=>25
+
+    ⑦Math.ceil(number);  向上取整 25.1=>26
+
+    ⑧number.toFixed(num);  取小数点后几位
+
+    ⑨音频audio对象API及property
+        var obj = document.getElementByTagName(audio);
+
+        API
+            ①obj.play();音频播放
+            ②obj.pause();音频暂停
+            ③obj.load();重新加载音视频标签  
+            ④ended  eg:obj.addEventListener('ended',function(){})  当前音乐播放完成后调用
+            ⑤error  eg:obj.addEventListener('error',function(){})  当前音乐播放发生错误后调用
+            ⑥loadeddata  eg:obj.addEventListener('loadeddata',function(){})  当加载媒体数据时调用
+            ⑦playing  eg:obj.addEventListener('playing',function(){})  当媒体从因缓冲而引起的暂停和停止恢复到播放时产生该事件
+
+        property
+            ①autoplay  value:autoplay  eg:<autio autoplay='autoplay'></autio>  媒体加载后自动播放   
+            ②controls  value:autoplay  eg:<autio autoplay='autoplay'></autio>  显示播控控件
+            ③currentSrc  obj.currentSrc=>返回当前媒体的URL
+            ④currentTime  obj.currentTime=>当前播放的时间，单位秒
+            ⑤duration  obj.duration=>返回媒体的播放总时长，单位秒
+            ⑥ended  obj.ended=>返回当前播放是否结束标志
+            ⑦loop  value:loop  eg:<autio loop='loop'></autio>  是否循环播放
+            ⑧preload  value:auto、meta、none  eg:<autio value='auto、meta、none'></autio>  规定是否预加载音频
+                auto - 当页面加载后载入整个音频
+                meta - 当页面加载后只载入元数据
+                none - 当页面加载后不载入音频
+            ⑨volume  obj.volume  value:0-1  音量
+
+    ⑩jQuery和DOM对象相互转换
+        jquery对象=>DOM
+            var $li = $("li")[0];  
+            var $li = $("li").get(0);
+        DOM=>jquery对象
+            var div = document.getElementsByTagName('div'); //dom对象
+            var $div = $(div); //jQuery对象
+
+操作数组常用的方法
+    .push() - 向数组的结尾追加值
+    .unshift - 向数组的开头插入值
+    .pop() - 删除数组中的最后一个值，并返回这个值
+    .shift() - 删除数组中的第一个值，并返回这个值
+    .splice() - 删除数组中的某个值，并返回这个值
+        eg: var array = [1,2,3,4,5,6]
+            array.splice(2,0,9);
+            result=> [1,2,9,3,4,5,6]
+
+            var array = [1,2,3,4,5,6]
+            array.splice(2,1,9);
+            result=> [1,2,9,4,5,6]
+
+    .sort() - 将数组排序
+        eg: var array = [1,4,7,2,34,46,4562]
+            array.sort(function(a,b){
+                return a-b
+            });
+            result=> [1,2,4,7,34,46,4562];
+
+    .reverse() - 将数组的顺序颠倒
+        eg: var array = [1,4,7,2,34,46,4562]
+            array.reverse()
+            result=> [4562,46,34,2,7,4,1];
+
+自调函数
+    ①(function(x,y){
+        alert x+y
+     })(1,2);  =>3
+    
+    ②(function(x,y){
+        alert x+y
+     }(1,2));  =>3
+    
+    ③void function(x){
+        x=x+1;
+        alert(x);
+     }(1); =>2
+    
+    ④!function(x){
+        return x-1
+     }(9); =>8
+    
+    ⑤-function(x,y){
+        alert(x+y);
+        return x+y;
+     }(3,4); =>7
+
+    ⑥+function(x,y){
+        alert(x+y);
+        return x+y;
+     }(3,4); =>7
+
+    ⑦--function(x,y){
+        alert(x+y);
+        return x+y;
+     }(3,4); =>7
+
+    ⑧++function(x,y){
+        alert(x+y);
+        return x+y;
+     }(3,4); =>7
+
+    ⑨~function(x){
+        alert(x)
+     }(4); =>4
+
+    ⑩new function(win){
+        console.log(win) // window
+     }(this);
+
+    ⑪typeof function(){
+        console.log(this) // 浏览器得控制台输出window
+     }(this);
+
+    ⑫delete function(){
+        console.log(this) // 浏览器得控制台输出window
+     }(this);
+
+exports和module.exports
+    commonJS规定，每个模块内部，module变量代表当前这个模块，这个变量是一个对象，它的exports属性(module.exports)是对外的接口，加载
+    每个模块，也就是加载该模块的module.exports属性，
+        eg:
+            var x = 5;
+            var addx = function(value){
+                return value + x;
+            }
+            module.exports.x = x;
+            module.exports.addx = addx;
+            以上代码通过module.exports输出变量x和函数addX。
+            require方法用于加载模块
+                eg:
+                    var example = require('./example.js');
+                    console.log(example.x);  =>5
+                    console.log(example.addx(1)); =>6
+
+    exports和module.exports
+        为了方便Node为每个模块提供一个exports变量，指向module.exports。这等同在每个模块头部，有一行这样的命令。
+        var exports = module.exports;
+        我们可以直接在 exports 对象上添加方法，表示对外输出的接口，如同在module.exports上添加一样。
+        注意，不能直接将exports变量指向一个值，因为这样等于切断了exports与module.exports的联系
+
+    ES6模块规范
+        不同于CommonJS，ES6使用 export 和 import 来导出、导入模块。
+        eg:
+            var firstName = 'Michael';
+            var lastName = 'Jackson';
+            var year = 1958;
+            export {firstName, lastName, year};
+        *需要特别注意的是，export命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系。
+            eg:
+                // 写法一
+                export var m = 1;
+
+                // 写法二
+                var m = 1;
+                export {m};
+
+                // 写法三
+                var n = 1;
+                export {n as m};
+        
+        export和export default命令
+            使用export default命令，为模块指定默认输出
+            export与export default均可用于导出常量、函数、文件、模块等。
+            在一个文件或模块中，export、import可以有多个，export default仅有一个
+            通过export方式导出，在导入时要加{ }，export default则不需要。
+            export能直接导出变量表达式，export default不行。
+            eg：
+                ①a.js
+                    export const a1 = 'asdf';
+                    export function a2(a){
+                        return a;
+                    }
+                对应的导入方式
+                b.js
+                    import {a,b} from 'a.js'
+
+                ②a.js
+                    const a1 = 'asdf';
+                    export default a1;
+                    对应的导入方式
+                    import a1 from 'a.js'
+
+export和export default的区别
+    ①在单个文件中，export和import可以有多个，export default只能有一个
+    ②通过export导出时要加{}，export default则不需要
+    ③输出单个值时使用export default，输出多个值用export，export和export default不能同时使用
+    ④用export导出，用import导入时需要使用{}
+  
+object.keys(option)
+    option:对象
+    作用:将对象属性名提取出来，并返回有由对象属性名组成的数组
+
+AMD、CMD、CommonJs和ES6对比
+
+    AMD[异步模块定义]
+        是requireJS(依赖前置[在需要的时候，在最上边定义好，然后通过回调使用])在推广过程中的对模块化定义的规范化产出
+        requireJS是AMD概念的一个实现
+
+    CMD[同步模块定义]
+        是SeaJS(依赖就近[在什么地方使用，就在什么地方引用])在推广过程中的对模块化定义的规范化产出
+        SeaJs是CMD概念的一个实现
+
+    CommonJs
+        通过module-exports定义，浏览器并不支持，nodejs推荐使用commonJS规范
+    
+    es6特性 export\import
+        export导出
+        import导入
+
