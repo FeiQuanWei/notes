@@ -170,60 +170,95 @@ exports和module.exports
         我们可以直接在 exports 对象上添加方法，表示对外输出的接口，如同在module.exports上添加一样。
         注意，不能直接将exports变量指向一个值，因为这样等于切断了exports与module.exports的联系
 
-    ES6模块规范
-        不同于CommonJS，ES6使用 export 和 import 来导出、导入模块。
-        eg:
-            var firstName = 'Michael';
-            var lastName = 'Jackson';
-            var year = 1958;
-            export {firstName, lastName, year};
-        *需要特别注意的是，export命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系。
+ES6中的export、export default和import
+    不同于CommonJS，ES6使用 export 和 import 来导出、导入模块。
+        ①eg:
+            /******************************导出**********************/
+                export let myName = "Jon";
+
+            /******************************引入**********************/
+                import {myName} from '上'
+
+        ②eg:
+            /******************************导出**********************/
+                var firstName = 'Michael';
+                var lastName = 'Jackson';
+                var year = 1958;
+                export {firstName, lastName, year};
+
+            /******************************引入**********************/
+                import {firstName, lastName, year} from '上'
+
+        ③如果不想暴露模块中变量的名字，可以通过as来操作
             eg:
-                // 写法一
-                export var m = 1;
+                /******************************导出**********************/
+                    var myName = 'Michael';
+                    var myAge = 'Jackson';
+                    var myfn = 1958;
+                    export {
+                        myName as name,
+                        myAge as age,
+                        myfn as fn
+                    };
 
-                // 写法二
-                var m = 1;
-                export {m};
+                /******************************引入**********************/
+                import {name, age, fn} from '上'
 
-                // 写法三
-                var n = 1;
-                export {n as m};
-        
-        export和export default命令
-            使用export default命令，为模块指定默认输出
-            export与export default均可用于导出常量、函数、文件、模块等。
-            在一个文件或模块中，export、import可以有多个，export default仅有一个
-            通过export方式导出，在导入时要加{ }，export default则不需要。
-            export能直接导出变量表达式，export default不行。
-            eg：
-                ①a.js
-                    export const a1 = 'asdf';
-                    export function a2(a){
-                        return a;
+        ④也可以直接导入整个模块
+            eg:
+                /******************************导出**********************/
+                    var myName = 'Michael';
+                    var myAge = 'Jackson';
+                    var myfn = 1958;
+                    export { myName, myAge, myfn };
+                /******************************引入**********************/
+                    import * as info from "上"; //通过*来批量接收，as 来指定接收的名字
+                    console.log(info.myName); => Michael
+                    console.log(info.myAge); => Jackson
+                    console.log(info.myfn); => 1958
+
+        ⑤export default导出单个数据
+            eg:
+                /******************************导出**********************/
+                    export default function(){
+                        return "默认导出一个方法"
                     }
-                对应的导入方式
-                b.js
-                    import {a,b} from 'a.js'
 
-                ②a.js
-                    const a1 = 'asdf';
-                    export default a1;
-                    对应的导入方式
-                    import a1 from 'a.js'
+                /******************************引入**********************/
+                    import myFn from "./test.js"; //注意这里默认导出不需要用{}。
+                    console.log(myFn()); //默认导出一个方法
 
-export和export default的区别
-    ①在单个文件中，export和import可以有多个，export default只能有一个
-    ②通过export导出时要加{}，export default则不需要
-    ③输出单个值时使用export default，输出多个值用export，export和export default不能同时使用
-    ④用export导出，用import导入时需要使用{}
-  
+        ⑥export default导出多个数据
+            eg:
+                /******************************导出**********************/
+                    export default {
+                        myFn(){
+                            return "默认导出一个方法"
+                        },
+                        myName: "Jon"
+                    }
+                
+                /******************************引入**********************/
+                    import myObj from "./test.js";
+                    console.log(myObj.myFn(), myObj.myName); //默认导出一个方法 Jon
+
+
+    *需要特别注意的是，export命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系。
+        
+    *export和export default命令
+        ①使用export default命令，为模块指定默认输出
+        ②export与export default均可用于导出常量、函数、文件、模块等。
+        ③在一个文件或模块中，export、import可以有多个，export default仅有一个
+        ④用export导出，用import导入时需要使用{}，export default则不需要。
+        ⑤export能直接导出变量表达式，export default不行。
+        ⑥输出单个值时使用export default，输出多个值用export，export和export default不能同时使用
+
+
 object.keys(option)
     option:对象
     作用:将对象属性名提取出来，并返回有由对象属性名组成的数组
 
 AMD、CMD、CommonJs和ES6对比
-
     AMD[异步模块定义]
         是requireJS(依赖前置[在需要的时候，在最上边定义好，然后通过回调使用])在推广过程中的对模块化定义的规范化产出
         requireJS是AMD概念的一个实现
