@@ -1,6 +1,16 @@
 https://cnodejs.org/topic/5a72c66ace45d440451465c3  node入门及进阶视频
 https://www.jianshu.com/p/7241f7c83f4a   Mac安装mongodb
 
+经验
+    display:table;无论内容一行还是两行，都可以垂直居中
+    str+'-hook'  作为样式时，表明该类是js为操作DOM而绑定的类，并没有实际样式效果
+优化
+    css样式减少嵌套层级
+    压缩图片
+    减少Dom操作次数
+    js代码减少循环次数
+    for循环优化
+
 事件bug
     mouseout和mouseleave事件
     mouseout:当鼠标移动到子元素上时，也会触发移出事件
