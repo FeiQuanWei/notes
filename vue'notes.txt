@@ -6,6 +6,16 @@ this.$nextTick(()=>{});
 在数据变化后要执行某个操作时，而这个操作需要根据改变的数据来改变DOM时，这个操作都应该放进.$nextTick()
 的回调函数中。
 
+通过声明ref="variable",然后通过this.$refs.variable来获取DOM对象，
+
+在使用this.$nextTick()时，一定要保证DOM已经被渲染，虽然说DOM是数据的自然映射(改变了数据就改变了DOM)，但是DOM发生变化实在
+.nextTick()的回调函数中。所以在操作原生DOM的时候，一定要使用.nextTick()，然后在这个接口的回调函数中做事情，
+
+--save：将保存配置信息到pacjage.json。默认为dependencies节点中。
+--dev：将保存配置信息devDependencies节点中。
+dependencies：运行时的依赖，发布后，即生产环境下还需要用的模块
+devDependencies：开发时的依赖。里面的模块是开发时用的，发布时用不到它。
+
 VUE框架对比
     一、vue和react
         1、angular提供的是一整套开发框架，是一款比较重的MVC或MV*框架

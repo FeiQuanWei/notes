@@ -1,9 +1,18 @@
 https://cnodejs.org/topic/5a72c66ace45d440451465c3  node入门及进阶视频
 https://www.jianshu.com/p/7241f7c83f4a   Mac安装mongodb
+https://cnodejs.org/topic/5b1939ad29e6e510415b2916
+https://cnodejs.org/topic/5ab3166be7b166bb7b9eccf7
+https://icomoon.io
+https://router.vuejs.org/zh/
+
+style标签的lang属性，规定元素内容的语言，rel(relation ship :关系图表)属性
+
+iconMoon  svg图表制作网站
 
 经验
     display:table;无论内容一行还是两行，都可以垂直居中
     str+'-hook'  作为样式时，表明该类是js为操作DOM而绑定的类，并没有实际样式效果
+
 优化
     css样式减少嵌套层级
     压缩图片
