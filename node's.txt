@@ -1,0 +1,16 @@
+nodejs不是JavaScript应用，不是web服务器，是JavaScript运行环境，
+
+通常被用来开发低延迟的网络应用，如网络聊天，也就是那些需要在服务器端环境和前端实时收集和交换数据的应用。编写高性能web应用
+
+构建在Chrome’s V8 这个著名的 JavaScript 引擎之上，Chrome’s V8以C/C++为主，相当于JavaScript转成C/C++调用。降低了学习成本
+
+基于事件驱动，非阻塞I/O模型，每个函数都是异步的，最后将由Libuv 这个 C/C++ 编写的事件循环处理库来处理这些I/O操作，
+
+Libuv扩展了JavaScript，使其拥有了io、fs等只有语言才有的特性，使得JavaScript同时具有了DOM操作，io(I/O)、fs(文件读写)和操作
+数据库的能力。
+
+缺点：回调太多难以控制、CPU密集任务处理。
+
+由C/C++接口转换成的JavaScript接口，这些接口统称为nodejs SDK
+
+JavaScript友好语言指的是能够使用其他语法实现，但最终编译成js的语言
