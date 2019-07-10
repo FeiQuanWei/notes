@@ -14,3 +14,5 @@ Libuv扩展了JavaScript，使其拥有了io、fs等只有语言才有的特性�
 由C/C++接口转换成的JavaScript接口，这些接口统称为nodejs SDK
 
 JavaScript友好语言指的是能够使用其他语法实现，但最终编译成js的语言
+
+异步函数：在未来的某个时间点或达到某种条件，会触发某个函数

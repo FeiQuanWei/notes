@@ -1,0 +1,213 @@
+export、export default和import
+    不同于CommonJS，ES6使用 export 和 import 来导出、导入模块。
+        ①eg:
+            /******************************导出**********************/
+                export let myName = "Jon";
+
+            /******************************引入**********************/
+                import {myName} from '上'
+
+        ②eg:
+            /******************************导出**********************/
+                var firstName = 'Michael';
+                var lastName = 'Jackson';
+                var year = 1958;
+                export {firstName, lastName, year};
+
+            /******************************引入**********************/
+                import {firstName, lastName, year} from '上'
+
+        ③如果不想暴露模块中变量的名字，可以通过as来操作
+            eg:
+                /******************************导出**********************/
+                    var myName = 'Michael';
+                    var myAge = 'Jackson';
+                    var myfn = 1958;
+                    export {
+                        myName as name,
+                        myAge as age,
+                        myfn as fn
+                    };
+
+                /******************************引入**********************/
+                import {name, age, fn} from '上'
+
+        ④也可以直接导入整个模块
+            eg:
+                /******************************导出**********************/
+                    var myName = 'Michael';
+                    var myAge = 'Jackson';
+                    var myfn = 1958;
+                    export { myName, myAge, myfn };
+                /******************************引入**********************/
+                    import * as info from "上"; //通过*来批量接收，as 来指定接收的名字
+                    console.log(info.myName); => Michael
+                    console.log(info.myAge); => Jackson
+                    console.log(info.myfn); => 1958
+
+        ⑤export default导出单个数据
+            eg:
+                /******************************导出**********************/
+                    export default function(){
+                        return "默认导出一个方法"
+                    }
+
+                /******************************引入**********************/
+                    import myFn from "./test.js"; //注意这里默认导出不需要用{}。
+                    console.log(myFn()); //默认导出一个方法
+
+        ⑥export default导出多个数据
+            eg:
+                /******************************导出**********************/
+                    export default {
+                        myFn(){
+                            return "默认导出一个方法"
+                        },
+                        myName: "Jon"
+                    }
+                
+                /******************************引入**********************/
+                    import myObj from "./test.js";
+                    console.log(myObj.myFn(), myObj.myName); //默认导出一个方法 Jon
+
+
+    *需要特别注意的是，export命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系。
+        
+    *export和export default命令
+        ①使用export default命令，为模块指定默认输出
+        ②export与export default均可用于导出常量、函数、文件、模块等。
+        ③在一个文件或模块中，export、import可以有多个，export default仅有一个
+        ④用export导出，用import导入时需要使用{}，export default则不需要。
+        ⑤export能直接导出变量表达式，export default不行。
+        ⑥输出单个值时使用export default，输出多个值用export，export和export default不能同时使用
+
+promist语法
+    new promist((resolve,reject)={
+        do somthing...
+        if(success){
+            resolte(success property)
+        }eles{
+            reject(fail property)
+        }
+    }).then((property)=>{
+        do somthing
+    }).catch((property)=>{
+        do somthing
+    })
+
+    向多个接口同时请求数据时，promis写法
+        var p1 = new  promise((resolve,reject)=>{
+            if(success){
+                resolve('success property1')
+            }else{
+                reject('fail property')
+            }
+        });
+
+        var p2 = new  promise((resolve,reject)=>{
+            if(success){
+                resolve('success property2')
+            }else{
+                reject('fail property')
+            }
+        });
+
+        Promise.all([p1,p2])).then((result)={
+            console.log(result);   
+        }
+        在p1和p2都完成后才执行.then(). result:=> ['success property1','success property2']
+
+    向多个接口同时请求数据，但是只获取第一个成功的返回值
+        var p1 = new Promise(function (resolve, reject) {
+            setTimeout(resolve, 500, 'P1');
+        });
+        var p2 = new Promise(function (resolve, reject) {
+            setTimeout(resolve, 600, 'P2');
+        });
+        Promise.race([p1, p2]).then(function (result) {
+            console.log(result); // 'P1'
+        });
+        因为p1执行的速度快，所以先返回，那么p2执行的结果将被遗弃
+
+let和const
+    let
+        声明变量，但是声明的变量只在let命令所在的代码块里有效
+        let声明的变量不存在声明提前，
+            eg:
+                console.log(a);  =>undefined
+                var a = 1;
+
+                console.log(b); =>报错
+                let b = 2;
+    const
+        声明一个只读的常量，声明后改变量不可被改变
+
+    顶层对象属性
+        es5中顶层意味着window窗口，顶层对象属性就是window的属性，所以顶层对象属性和全局变量是等价的。
+        顶层对象属性是可以在任何地方进行读写的，非常不利于模块化编程，所以es6中为了改变这一点，也为了保证兼容性，
+        var命令和function命令声明全局变量(顶层对象属性)，另一方面规定，let命令、const命令和class命令也可以声明全局变量，
+        但是，不属于顶层对象属性。也就是说从es6开始，全局变量将逐步和顶层对象属性脱钩。
+            eg:
+                var a = 1;
+                window.a  =>1;
+                let b = 1;
+                window.b =>undefined
+
+数组的解构和赋值
+    从数组和对象中提取值，对变量赋值，被称为解构(Destructuring)，如果解构不成功，变量的值就是undefined
+    事实上，只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值
+
+对象的解构和赋值
+    解构赋值的用途
+        1、交换变量的值
+        2、接受函数返回的多个值
+        3、提取JSON数据
+    
+Map
+    ES6中新的数据类型，键值对的结构。
+    *初始化Map需要一个二维数据或一个空数组
+    var map = new Map();
+    map.set(key,value);  设置某个key值
+    map.get(key);  得到制定的key值得value
+    map.has(key);  查看是否有这个key值
+    map.delete(key);  删除某个key值
+
+Set
+    ES6中新的数据类型，只存储key，不存储value
+    *初始化Set()需要一个数据或空
+    var set = new Set();
+    set.add(key);
+    set.delete(key);
+
+字符串的扩展
+    ES6加强了对unicode的支持，允许使用'\uxxxx'的形式来表示一个字符，其中xxxx表示字符的Unicode码，但是这种表示法只限于
+    码点在\u0000~\uFFFF之间的字，超出这个范围的字符必须使用双字节的形式来表示，
+    eg:
+        "\u0061" => a
+        "\uD842\uDFB7" => 吉
+        "\u20BB7" => 7
+    由于"\u20BB7"  超出了\uFFFF这个范围，JavaScript会理解成\u20BB + 7 ，由于\u20BB是一个不可打印的字符，所以只会显示一个
+    空格，后面跟着一个7，JavaScript对这一点做出了改进，只要将码点放入大括号中，JavaScript就能正确的解读这个码。
+    eg:
+        '\u{1F680}' === '\uD83D\uDE80'
+        "\u{20BB7}" => 吉
+    
+    ES6为字符串添加了遍历器接口，使得字符串可以被for...of循环遍历
+        eg:
+            let arr1 = [1,2,3,4,5]
+            for(let vari of arr1){
+                console.log(vari): => 1,2,3,4,5
+            }
+    
+    字符串模板
+        `this is es6 string model ${变量}`
+        在字符串模板中可以使用任意的JavaScript表达式以及对象属性
+
+        模板字符串中还可以调用函数
+            eg:
+                function func1(){
+                    console.log("function")
+                }
+                `func1 is a ${func1}`
+        
+        模板字符串内部就是执行JavaScript代码

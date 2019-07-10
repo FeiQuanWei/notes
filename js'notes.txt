@@ -31,28 +31,33 @@ iconMoon  svg图表制作网站
 引用类型
     object、function、array
 
+计数器传参
+    setInterval(function(property){
+        console.log(property)
+    },1000,'property')
+
 常用api
-    ①NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
+    NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
         num 0~20之间，包括0和20
 
-    ②str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
+    str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
         startIndex开始位置下标，endIndex结束位置下标，截取字符串不包括结束位置的字符
 
-    ③str.splice(startIndex,length[,item1,item2,item3,item4]); 向数组中添加&删除元素，改变原变量
+    str.splice(startIndex,length[,item1,item2,item3,item4]); 向数组中添加&删除元素，改变原变量
         startIndex开始位置下标[包括开始位置的字符],length删除长度，item1~item4向数组中添加的元素
 
-    ④str.split('symbol');
+    str.split('symbol');
         以symbol为分隔符将str变成数组，改变原数据
         
-    ⑤Math.floor(number);  向下取整 25.6=>25
+    Math.floor(number);  向下取整 25.6=>25
 
-    ⑥Math.round(number);  四舍五入 25.6=>25
+    Math.round(number);  四舍五入 25.6=>25
 
-    ⑦Math.ceil(number);  向上取整 25.1=>26
+    Math.ceil(number);  向上取整 25.1=>26
 
-    ⑧number.toFixed(num);  取小数点后几位
+    number.toFixed(num);  取小数点后几位
 
-    ⑨音频audio对象API及property
+    音频audio对象API及property
         var obj = document.getElementByTagName(audio);
 
         API
@@ -78,13 +83,48 @@ iconMoon  svg图表制作网站
                 none - 当页面加载后不载入音频
             ⑨volume  obj.volume  value:0-1  音量
 
-    ⑩jQuery和DOM对象相互转换
+    jQuery和DOM对象相互转换
         jquery对象=>DOM
             var $li = $("li")[0];  
             var $li = $("li").get(0);
         DOM=>jquery对象
             var div = document.getElementsByTagName('div'); //dom对象
             var $div = $(div); //jQuery对象
+    
+    Math.log(num)
+        返回一个自然数的基数
+
+    object.keys(option)
+        option:对象
+        作用:将对象属性名提取出来，并返回有由对象属性名组成的数组
+    
+    Object.setPrototypeOf(object, prototype)
+        设置一个对象的原型对象，被设置的对象可以从自己的原型对象中继承其自带的方法和属性
+        eg:
+            let proto = {};
+            let obj = { x: 10 };
+            Object.setPrototypeOf(obj, proto);
+            
+            proto.y = 20;
+            proto.z = 40;
+            
+            obj.x // 10
+            obj.y // 20
+            obj.z // 40
+
+        如果第一个参数不是对象，会自动转为对象。但是由于返回的还是第一个参数，所以这个操作不会产生任何效果。
+        eg:
+            Object.setPrototypeOf(1, {}) === 1 // true
+            Object.setPrototypeOf('foo', {}) === 'foo' // true
+            Object.setPrototypeOf(true, {}) === true // true
+
+        由于 undefined 和 null 无法转为对象，所以如果第一个参数是 undefined 或 null，就会报
+        
+    Object.getPrototypeOf(obj);
+        获取一个对象的原型对象
+    
+    String.fromCharCode('码点')
+        从码点返回对应字符。
 
 操作数组常用的方法
     .push() - 向数组的结尾追加值
@@ -189,93 +229,10 @@ exports和module.exports
         我们可以直接在 exports 对象上添加方法，表示对外输出的接口，如同在module.exports上添加一样。
         注意，不能直接将exports变量指向一个值，因为这样等于切断了exports与module.exports的联系
 
-ES6中的export、export default和import
-    不同于CommonJS，ES6使用 export 和 import 来导出、导入模块。
-        ①eg:
-            /******************************导出**********************/
-                export let myName = "Jon";
-
-            /******************************引入**********************/
-                import {myName} from '上'
-
-        ②eg:
-            /******************************导出**********************/
-                var firstName = 'Michael';
-                var lastName = 'Jackson';
-                var year = 1958;
-                export {firstName, lastName, year};
-
-            /******************************引入**********************/
-                import {firstName, lastName, year} from '上'
-
-        ③如果不想暴露模块中变量的名字，可以通过as来操作
-            eg:
-                /******************************导出**********************/
-                    var myName = 'Michael';
-                    var myAge = 'Jackson';
-                    var myfn = 1958;
-                    export {
-                        myName as name,
-                        myAge as age,
-                        myfn as fn
-                    };
-
-                /******************************引入**********************/
-                import {name, age, fn} from '上'
-
-        ④也可以直接导入整个模块
-            eg:
-                /******************************导出**********************/
-                    var myName = 'Michael';
-                    var myAge = 'Jackson';
-                    var myfn = 1958;
-                    export { myName, myAge, myfn };
-                /******************************引入**********************/
-                    import * as info from "上"; //通过*来批量接收，as 来指定接收的名字
-                    console.log(info.myName); => Michael
-                    console.log(info.myAge); => Jackson
-                    console.log(info.myfn); => 1958
-
-        ⑤export default导出单个数据
-            eg:
-                /******************************导出**********************/
-                    export default function(){
-                        return "默认导出一个方法"
-                    }
-
-                /******************************引入**********************/
-                    import myFn from "./test.js"; //注意这里默认导出不需要用{}。
-                    console.log(myFn()); //默认导出一个方法
-
-        ⑥export default导出多个数据
-            eg:
-                /******************************导出**********************/
-                    export default {
-                        myFn(){
-                            return "默认导出一个方法"
-                        },
-                        myName: "Jon"
-                    }
-                
-                /******************************引入**********************/
-                    import myObj from "./test.js";
-                    console.log(myObj.myFn(), myObj.myName); //默认导出一个方法 Jon
 
 
-    *需要特别注意的是，export命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系。
-        
-    *export和export default命令
-        ①使用export default命令，为模块指定默认输出
-        ②export与export default均可用于导出常量、函数、文件、模块等。
-        ③在一个文件或模块中，export、import可以有多个，export default仅有一个
-        ④用export导出，用import导入时需要使用{}，export default则不需要。
-        ⑤export能直接导出变量表达式，export default不行。
-        ⑥输出单个值时使用export default，输出多个值用export，export和export default不能同时使用
 
 
-object.keys(option)
-    option:对象
-    作用:将对象属性名提取出来，并返回有由对象属性名组成的数组
 
 AMD、CMD、CommonJs和ES6对比
     AMD[异步模块定义]
