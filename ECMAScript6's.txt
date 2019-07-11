@@ -211,3 +211,23 @@ Set
                 `func1 is a ${func1}`
         
         模板字符串内部就是执行JavaScript代码
+    
+    标签模板
+        相当于调用函数的另一种方式
+        function func1(a){
+            console.log(a);
+        }
+        正常调用 func1(a);
+        模板式调用  func1`a`
+
+字符串新API
+    String.fromCodePoint(码点);
+        返回码点对应的字符，可以大于0xFFFF，如果有多个参数，那么这些参数将会合并成一个字符串
+        eg:
+            String.fromCodePoint()
+    
+    String.codePointAt();
+        将字符转变成对应的码点
+    
+    String.raw(string)
+        将字符串内的斜杠进行转义，即斜杠前再加一个斜杠

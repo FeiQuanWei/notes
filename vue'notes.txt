@@ -18,6 +18,8 @@ devDependencies：开发时的依赖。里面的模块是开发时用的，发�
 
 当vue操作对象中可能不存在的属性时，vue的defineProperty不会触发get和set，需通过vue.set(Object,'property',value)
 
+0
+
 VUE框架对比
     一、vue和react
         1、angular提供的是一整套开发框架，是一款比较重的MVC或MV*框架

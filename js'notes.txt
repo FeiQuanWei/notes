@@ -36,6 +36,12 @@ iconMoon  svg图表制作网站
         console.log(property)
     },1000,'property')
 
+正则表达式
+    var reg = new RegExp('正则表达式');
+    reg.test("string");   查看字符串中是否有符合正则表达式的,返回true或false
+    reg.exec("string");  检索字符串是否有指定字符，如果有责返回指定字符，否则返回null
+    reg.compile("正则表达式");  改变正则表达式
+
 常用api
     NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
         num 0~20之间，包括0和20
@@ -45,6 +51,9 @@ iconMoon  svg图表制作网站
 
     str.splice(startIndex,length[,item1,item2,item3,item4]); 向数组中添加&删除元素，改变原变量
         startIndex开始位置下标[包括开始位置的字符],length删除长度，item1~item4向数组中添加的元素
+
+    str.substr(startIndex,length);
+        返回新值，原变量不改变，如果是负数，从字符串的尾部开始
 
     str.split('symbol');
         以symbol为分隔符将str变成数组，改变原数据
