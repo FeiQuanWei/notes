@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .wrapper {
+            width: 100%;
+            height: 50px;
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            background-color: #aaa;
+            z-index: 10;
+        }
+        .transition-wrapper {
+            width: 100%;
+            height: 200px;
+            background-color: #000;
+            z-index: -1;
+            position:absolute;
+            transform: translate3d(0,-100%,0);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <a href="javascript:;" @click="wrappershow">来，点击尝试一下</a>
+        <div class="wrapper">
+            <transition name="wrappershow"
+            @before-enter="beforeenter"
+            @enter="enter"
+            @after-enter="afterenter"
+            @enter-cancelled="entercancelled">
+                <div v-show="ifshow" class="transition-wrapper">{{asdf}}</div>
+            </transition>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                asdf: "asdf",
+                ifshow:false
+            },
+            methods: {
+                wrappershow() {
+                    this.ifshow = !this.ifshow
+                },
+                beforeenter(el){
+                    console.log(el);
+                },
+                enter(el,done){
+                    done();
+                },
+                afterenter(el){
+
+                },
+                entercancelled(el){
+
+                }
+            },
+
+        })
+    </script>
+</body>
+
+</html>

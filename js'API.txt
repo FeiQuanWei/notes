@@ -1,0 +1,151 @@
+对象API
+    object.keys(option)
+        option:对象
+        作用:将对象属性名提取出来，并返回有由对象属性名组成的数组
+    
+    Object.setPrototypeOf(object, prop)
+        设置一个对象的原型对象，被设置的对象可以从自己的原型对象中继承其自带的方法和属性
+        eg:
+            let proto = {};
+            let obj = { x: 10 };
+            Object.setPrototypeOf(obj, proto);
+            
+            proto.y = 20;
+            proto.z = 40;
+            
+            obj.x // 10
+            obj.y // 20
+            obj.z // 40
+
+        如果第一个参数不是对象，会自动转为对象。但是由于返回的还是第一个参数，所以这个操作不会产生任何效果。
+        eg:
+            Object.setPrototypeOf(1, {}) === 1 // true
+            Object.setPrototypeOf('foo', {}) === 'foo' // true
+            Object.setPrototypeOf(true, {}) === true // true
+
+        由于 undefined 和 null 无法转为对象，所以如果第一个参数是 undefined 或 null，就会报
+        
+    Object.getPrototypeOf(obj);
+        获取一个对象的原型对象
+
+    Object.assign(target,...sources)
+        将所有可枚举属性的值从一个或多个源对象赋值给另一个对象，
+        返回一个新对象，如果属性名相同，那么属性值将会被覆盖
+    
+    Object.defindProperty(obj,prop,{
+        
+    })
+
+    Object.getOwnPropertyDescriptor(obj,prop);
+        返回对象指定属性的属性描述符(对象)
+        eg：
+            var foo = {aa:"asdf"};
+            var b = Object.getOwnPropertyDescriptor(foo,aa);
+            b:{
+                configurable: true,   该属性是否可被删除
+                enumerable: true,    该属性是否可被枚举
+                value: 42,  属性值
+                writable: true   该属性是否可写
+            }
+
+字符串api
+    str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
+        startIndex开始位置下标，endIndex结束位置下标，截取字符串不包括结束位置的字符
+
+    str.splice(startIndex,length[,item1,item2,item3,item4]); 向数组中添加&删除元素，改变原变量
+        startIndex开始位置下标[包括开始位置的字符],length删除长度，item1~item4向数组中添加的元素
+
+    str.substr(startIndex,length);
+        返回新值，原变量不改变，如果是负数，从字符串的尾部开始
+
+    str.split('symbol');
+        以symbol为分隔符将str变成数组，改变原数据
+    
+    String.fromCharCode('码点')
+        从码点返回对应字符。
+        
+数组API
+    Arrayt.push() - 向数组的结尾追加值
+    Arrayt.unshift - 向数组的开头插入值
+    Arrayt.pop() - 删除数组中的最后一个值，并返回这个值
+    Arrayt.shift() - 删除数组中的第一个值，并返回这个值
+    Arrayt.splice() - 删除数组中的某个值，并返回这个值
+        eg: var array = [1,2,3,4,5,6]
+            array.splice(2,0,9);
+            result=> [1,2,9,3,4,5,6]
+
+            var array = [1,2,3,4,5,6]
+            array.splice(2,1,9);
+            result=> [1,2,9,4,5,6]
+
+    Arrayt.sort() - 将数组排序
+        eg: var array = [1,4,7,2,34,46,4562]
+            array.sort(function(a,b){
+                return a-b
+            });
+            result=> [1,2,4,7,34,46,4562];
+
+    Arrayt.reverse() - 将数组的顺序颠倒
+        eg: var array = [1,4,7,2,34,46,4562]
+            array.reverse()
+            result=> [4562,46,34,2,7,4,1];
+
+其他API
+    NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
+        num 0~20之间，包括0和20
+
+    Math.floor(number);  
+        向下取整 25.6=>25
+
+    Math.round(number);  
+        四舍五入 25.6=>25
+
+    Math.ceil(number);  
+        向上取整 25.1=>26
+
+    number.toFixed(num);  
+        取小数点后几位
+
+    音频audio对象API及property
+        var obj = document.getElementByTagName(audio);
+
+        API
+            ①obj.play();音频播放
+            ②obj.pause();音频暂停
+            ③obj.load();重新加载音视频标签  
+            ④ended  eg:obj.addEventListener('ended',function(){})  当前音乐播放完成后调用
+            ⑤error  eg:obj.addEventListener('error',function(){})  当前音乐播放发生错误后调用
+            ⑥loadeddata  eg:obj.addEventListener('loadeddata',function(){})  当加载媒体数据时调用
+            ⑦playing  eg:obj.addEventListener('playing',function(){})  当媒体从因缓冲而引起的暂停和停止恢复到播放时产生该事件
+
+        property
+            ①autoplay  value:autoplay  eg:<autio autoplay='autoplay'></autio>  媒体加载后自动播放   
+            ②controls  value:autoplay  eg:<autio autoplay='autoplay'></autio>  显示播控控件
+            ③currentSrc  obj.currentSrc=>返回当前媒体的URL
+            ④currentTime  obj.currentTime=>当前播放的时间，单位秒
+            ⑤duration  obj.duration=>返回媒体的播放总时长，单位秒
+            ⑥ended  obj.ended=>返回当前播放是否结束标志
+            ⑦loop  value:loop  eg:<autio loop='loop'></autio>  是否循环播放
+            ⑧preload  value:auto、meta、none  eg:<autio value='auto、meta、none'></autio>  规定是否预加载音频
+                auto - 当页面加载后载入整个音频
+                meta - 当页面加载后只载入元数据
+                none - 当页面加载后不载入音频
+            ⑨volume  obj.volume  value:0-1  音量
+
+    jQuery和DOM对象相互转换
+        jquery对象=>DOM
+            var $li = $("li")[0];  
+            var $li = $("li").get(0);
+        DOM=>jquery对象
+            var div = document.getElementsByTagName('div'); //dom对象
+            var $div = $(div); //jQuery对象
+    
+    Math.log(num)
+        返回一个自然数的基数
+
+    
+    
+    
+
+    _.shuffle(Array);  
+        打乱数组的排序，返回一个新数组

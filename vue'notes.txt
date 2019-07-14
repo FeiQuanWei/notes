@@ -1,3 +1,6 @@
+https://www.jianshu.com/c/bc6a4df0b369    vue2.0开发移动端音乐播放器
+https://daneden.github.io/animate.css/
+
 this.$nextTick(()=>{});
 在created()钩子函数执行的时候DOM 其实并未进行任何渲染，而此时进行DOM操作无异于徒劳，
 所以此处一定要将DOM操作的js代码放进Vue.nextTick()的回调函数中。与之对应的就是mounted()钩子函数，
@@ -18,7 +21,115 @@ devDependencies：开发时的依赖。里面的模块是开发时用的，发�
 
 当vue操作对象中可能不存在的属性时，vue的defineProperty不会触发get和set，需通过vue.set(Object,'property',value)
 
-0
+el.dataset.自定义属性名
+    获取DOM元素的自定义属性
+
+transition
+    元素本身的属性应为过渡后的动作，
+    transition-name-enter{
+        定义进入时的动作
+    }
+    transition-name-enter-to{
+        定义进入过度后的动作
+    }
+    transition-name-enter-active{
+        定义进入相关过渡属性和时间
+    }
+    transition-name-leave{
+        定义离开时的动作
+    }
+    transition-name-leave-to{
+        定义离开后的动作
+    }
+    transition-name-leave-active{
+        定义离开相关属性和时间
+    }
+    相关css在执行过渡后都会被移除，详情参照test6.html
+
+    显性过渡的持续时间
+        duration
+            eg:
+                <transition :duration="1000"></transition>  单位为毫秒
+            或进入和离开的时间
+            eg:
+                <transition :duration="{enter:500,leave:500}"></transition>
+    
+    JavaScript钩子(写在methods中)：
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:after-enter="afterEnter"
+        v-on:enter-cancelled="enterCancelled"
+
+        v-on:before-leave="beforeLeave"
+        v-on:leave="leave"
+        v-on:after-leave="afterLeave"
+        v-on:leave-cancelled="leaveCancelled"
+
+        这些函数钩子可以结合animations/transitions使用，也可以单独使用
+        当只用JavaScript钩子时，在enter和leave中必须使用done回调函数，否自enter和leave会同时进行，
+        推荐在仅使用JavaScript钩子时，使用:css="false"，Vue会跳过css的检测，也可以避免过渡中css的影响
+    
+    初始渲染的过渡appear
+        css过渡
+            <transition 
+                appear 
+                appear-class=""
+                appear-to-class=""
+                appear-active-class="">
+            </transition>
+
+        JavaScript钩子
+            <transition 
+                appear
+                @before-appear=""
+                @appear=""
+                @after-appear=""
+                @appear-cancelled="">
+            </transition>
+
+    过渡模式
+        <transition mode="in-out/out-in"></transition>
+            in-out:先进后出
+            out-in:先出后进
+        
+    多个组件过渡
+        多个组件过渡时使用v-bind:is=""，v-bind:is=""表示根据is的值来决定那个组件需要被渲染
+        eg:
+            <div>
+                <component :is="componentsName"></component>
+            </div>
+            new Vue({
+                components:{
+                    'v-a':{
+                        template:"<div>v-a</div>"
+                    },
+                    'v-b':{
+                        template:"<div>v-b</div>"
+                    }
+                }
+            })
+
+    列表过渡
+        <transition-group tag=""></transition-group>
+        tag:值为标签名，定义过渡元素最外层元素，transition-group内部的元素要有唯一标识key值
+
+    可复用的组件
+        将transition作为组件调用
+            eg:
+                Vue.component("组件名",{
+                    functional:ture,
+                    template:`<transition name="" mode="" >
+                            <slot></slot>
+                            </transition>`,
+                    methods:{
+
+                    },
+                    data(){
+                        return {}
+                    }
+                })
+                该组件为全局组件
+                    functional:表示没有数据交互，也没有this上下文
 
 VUE框架对比
     一、vue和react
