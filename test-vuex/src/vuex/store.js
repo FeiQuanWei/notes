@@ -7,6 +7,10 @@ const state = {
 const mutations = {
     add(state,n){
         state.count += n;
+        setTimeout(()=>{
+            state.count--;
+        },3000);
+        console.log(1);
     },
     reduce(state){
         state.count--;
@@ -21,6 +25,10 @@ const getters = {
 const actions = {
     addAction(store){
         store.commit("add",10)
+        setTimeout(()=>{
+            commit("reduce")
+        },3000);
+        console.log("我先执行了")
     },
     reduceAction({commit}){
         commit("reduce")

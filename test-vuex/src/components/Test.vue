@@ -1,17 +1,16 @@
 <template>
   <div class="wrapper">
-    asdf
-      <h1>{{$store.state.count}}--------{{count}}</h1>
+      <h1>{{count}}--------{{$store.state.count}}</h1>
 
-      <!-- <p class="sync">
-        <button type="button" @click="add">+</button>
+      <p class="sync">
+        <button type="button" @click="add(5)">+</button>
         <button type="button" @click="$store.commit('reduce')">-</button>
-      </p> -->
+      </p>
 
-      <p class="async">
+      <!-- <p class="async">
         <button type="button" @click="addAction">+</button>
         <button type="button" @click="reduceAction">-</button>
-      </p>
+      </p> -->
   </div>
 </template>
 <script>
