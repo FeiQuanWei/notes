@@ -1,7 +1,6 @@
 <template>
   <div class="wrapper">
       <h1>{{count}}--------{{$store.state.count}}</h1>
-
       <p class="sync">
         <button type="button" @click="add(5)">+</button>
         <button type="button" @click="$store.commit('reduce')">-</button>
