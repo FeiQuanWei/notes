@@ -6,7 +6,7 @@ const state = {
 }
 const mutations = {
     add(state,n){
-        state.count +=n;
+        state.count += n;
     },
     reduce(state){
         state.count--;
@@ -19,10 +19,10 @@ const getters = {
 }
 
 const actions = {
-    addAction(context){
-        context.commit("add",10)
+    addAction(store){
+        store.commit("add",10)
     },
-    reduceAction(commit){
+    reduceAction({commit}){
         commit("reduce")
     }
 }

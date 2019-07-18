@@ -2,10 +2,11 @@
   <div class="wrapper">
     asdf
       <h1>{{$store.state.count}}--------{{count}}</h1>
-      <p class="sync">
+
+      <!-- <p class="sync">
         <button type="button" @click="add">+</button>
         <button type="button" @click="$store.commit('reduce')">-</button>
-      </p>
+      </p> -->
 
       <p class="async">
         <button type="button" @click="addAction">+</button>

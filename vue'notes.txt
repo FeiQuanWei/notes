@@ -1,5 +1,6 @@
 https://www.jianshu.com/c/bc6a4df0b369    vue2.0开发移动端音乐播放器
 https://daneden.github.io/animate.css/
+https://www.cnblogs.com/saysmy/p/6635504.html
 
 this.$nextTick(()=>{});
 在created()钩子函数执行的时候DOM 其实并未进行任何渲染，而此时进行DOM操作无异于徒劳，
