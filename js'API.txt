@@ -94,6 +94,14 @@
             array.reverse()
             result=> [4562,46,34,2,7,4,1];
 
+    Arrat.filter()   寻找数组中符合某条件的值，并返回
+        eg:var arr = [1,2,3,4,5];
+            var _sdArr = arr.filter((a)=>{
+                return a>4
+            })
+            _sdArr  result=> [5]
+            返回数组中大于4的值，返回的是由符合条件的值组成的数组
+
 其他API
     NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
         num 0~20之间，包括0和20
