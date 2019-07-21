@@ -1,0 +1,15 @@
+什么是webpack
+  模块打包器
+
+作用
+  分析项目，查找到项目中不能直接被浏览器识别的语言，将其转换并打包为合适的格式供浏览器分析识别
+
+基本命令
+  1、webpack 源文件 -o 目标文件     =>将源文件打包成目标文件
+    eg:webpack ./src/entery.js -o dist/bundle.js
+
+项目结构
+  .node_module  --插件存储文件夹
+  .src  --源文件夹
+  .dist
+    .index.html
