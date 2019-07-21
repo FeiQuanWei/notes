@@ -8,6 +8,9 @@
   1、webpack 源文件 -o 目标文件     =>将源文件打包成目标文件
     eg:webpack ./src/entery.js -o dist/bundle.js
 
+安装live-server
+  需全局安装 sudo npm install live-server -g
+
 项目结构
   .node_module  --插件存储文件夹
   .src  --源文件夹
