@@ -1,0 +1,12 @@
+{
+  "name": "ES6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src/index.js -o dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

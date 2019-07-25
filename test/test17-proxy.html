@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let obj = {
+      add(){
+        return val+100
+      },
+      name:"asdf"
+    }
+    let pro = new Proxy({
+      add(val){
+        return val+100
+      },
+      name:"asdf"
+    },{
+      get(target,key,property){
+        console.log(target)
+        console.log(key)
+        return target
+      }
+    })
+    console.log(pro.name)
+    </script>
+</body>
+</html>

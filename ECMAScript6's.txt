@@ -1,3 +1,43 @@
+语法糖
+    在程序中增加了某种语法，这种语法对程序的编译不会造成影响，更加方便程序员使用，增强了语法的可读性，减少代码的出错率
+
+for..in 和 for..of的区别
+    0
+
+es6转成es5
+    全局安装babel-cli 
+    本地安装babel-preset-env和babel-cli
+    babel 要转换的文件路径 -o 目标文件路径
+
+新的声明变量方式
+    var=>variable
+    let=>局部声明
+    const=>常亮声明
+
+    let和const
+        let
+            声明变量，但是声明的变量只在let命令所在的代码块里有效
+            let声明的变量不存在声明提前，
+                eg:
+                    console.log(a);  =>undefined
+                    var a = 1;
+
+                    console.log(b); =>报错
+                    let b = 2;
+        const
+            声明一个只读的常量，声明后改变量不可被改变
+
+        顶层对象属性
+            es5中顶层意味着window窗口，顶层对象属性就是window的属性，所以顶层对象属性和全局变量是等价的。
+            顶层对象属性是可以在任何地方进行读写的，非常不利于模块化编程，所以es6中为了改变这一点，也为了保证兼容性，
+            var命令和function命令声明全局变量(顶层对象属性)，另一方面规定，let命令、const命令和class命令也可以声明全局变量，
+            但是，不属于顶层对象属性。也就是说从es6开始，全局变量将逐步和顶层对象属性脱钩。
+                eg:
+                    var a = 1;
+                    window.a  =>1;
+                    let b = 1;
+                    window.b =>undefined
+
 export、export default和import
     不同于CommonJS，ES6使用 export 和 import 来导出、导入模块。
         ①eg:
@@ -81,6 +121,384 @@ export、export default和import
         ⑤export能直接导出变量表达式，export default不行。
         ⑥输出单个值时使用export default，输出多个值用export，export和export default不能同时使用
 
+数组的解构和赋值
+    数组的解构中，当一个值严格等于undefined的时候才会被赋值给变量
+    数组的解构
+        let [a,b,c] = [1,2,3]
+        a=>1
+        b=>2
+        c=>3
+        数组的解构由变量的顺序和位置决定
+
+    对象的解构
+        变量的机构由变量的key值决定
+        eg:
+            let {a,b} = {a:1,b:2}
+        
+        当变量先被声明后，解构时应在表达式外层添加括号
+        eg:
+            let a;
+            ({a} = {a:1})
+
+    字符串的解构
+        let [a,b,c,d] = 'abcd'
+        a=>'a'
+        b=>'b'
+        c=>'c'
+        d=>'d'
+
+    事实上，只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值
+
+扩展运算符和rest运算符
+    扩展运算符作用
+        1、调用方法时，不确定传参的数量，可用扩展运算符
+            eg:
+                function arr[0](...arr){
+                    console.log(arr[0])
+                    console.log(arr[1])
+                    console.log(arr[2])
+                    console.log(arr[3])
+                }
+                test(1,2,3)
+                result => 1,2,3,undefined
+        
+        2、对象或数组深拷贝
+            eg:
+                let arr1 = [1,2,3]
+                let arr2 = arr1;
+                console.log(arr2); => [1,2,3]
+                arr2.push(4);
+                console.log(arr1); => [1,2,3,4]
+                原因为arr2是arr1的映射，他们指向相同的内存地址
+            
+            resolve:
+                let arr1 = [1,2,3];
+                let arr2 = [...arr1];
+                console.log(arr2); => [1,2,3]
+                arr2.push(4);
+                console.log(arr2); => [1,2,3,4]
+                console.log(arr1); => [1,2,3]
+
+    rest运算符
+        function test(first,...arr){
+            console.log(arr.length);  => 6
+        }
+        test(1,2,3,4,5,6,7)
+
+字符串的扩展
+    字符串模板
+        `this is es6 string model ${变量}`
+        在字符串模板中可以使用任意的JavaScript表达式以及对象属性
+
+        模板字符串中还可以调用函数
+            eg:
+                function func1(){
+                    console.log("function")
+                }
+                `func1 is a ${func1}`
+        
+        模板字符串内部就是执行JavaScript代码
+    新增字符串API
+        str.includes("str");判断str内是否含有"str"，返回值boolean
+        str.startsWith("str");判断字符串开头是否是"str"，返回值boolean
+        str.endsWith("str");判断字符串结尾是否是"str"，返回值boolean
+        str.repeat(num);将字符串赋值几次
+
+    ES6加强了对unicode的支持，允许使用'\uxxxx'的形式来表示一个字符，其中xxxx表示字符的Unicode码，但是这种表示法只限于
+    码点在\u0000~\uFFFF之间的字，超出这个范围的字符必须使用双字节的形式来表示，
+    eg:
+        "\u0061" => a
+        "\uD842\uDFB7" => 吉
+        "\u20BB7" => 7
+    由于"\u20BB7"  超出了\uFFFF这个范围，JavaScript会理解成\u20BB + 7 ，由于\u20BB是一个不可打印的字符，所以只会显示一个
+    空格，后面跟着一个7，JavaScript对这一点做出了改进，只要将码点放入大括号中，JavaScript就能正确的解读这个码。
+    eg:
+        '\u{1F680}' === '\uD83D\uDE80'
+        "\u{20BB7}" => 吉
+    
+    ES6为字符串添加了遍历器接口，使得字符串可以被for...of循环遍历
+        eg:
+            let arr1 = [1,2,3,4,5]
+            for(let vari of arr1){
+                console.log(vari): => 1,2,3,4,5
+            }
+
+    标签模板
+        相当于调用函数的另一种方式
+        function func1(a){
+            console.log(a);
+        }
+        正常调用 func1(a);
+        模板式调用  func1`a`
+
+数字的操作
+    Number.isFinite(var);判断变量是否是数字类型，最大安全整数的取值范围2的53次方到-2的53次方
+    Number.isNaN(var);判断变量是否是NaN
+    Number.isInterge(var);判断变量是否是整数
+    Number.parseInt(var);转为整数
+    Number.parseFloat(var);转为浮点数
+    Number.MAX_SAFE_INTERGE();最大安全整数
+    Number.MIN_SAFE_INTERGE();最大安全整数
+    Number.isSafeInterge(var);判断是否为安全整数
+
+新增的数组知识
+    JSON数组格式
+        {
+            'a':'a',
+            'b':'b',
+            'c':'c',
+            length:3
+        }
+    Array.form('JSON');将JSON数据转换成JSON数组格式
+    Array.of('var');将变量转换成数组格式
+
+    arr.find((value,index,arr)=>{})  在数组中查找指定的值，并返回...
+        eg:
+            let arr = [1,2,3,4,5]
+            arr.find((value,index,arr){  value=>要查找的值，index=>超找到下表，arr=>
+                return arr
+            })
+
+    arr.fill(value,startIndex,endIndex);想数组中填充
+        eg:
+            let arr = [1,2,3,4];
+            arr.file(5,2,3); => [1,2,5,4]
+    
+    数组的循环
+        for(let item of arr){}
+        eg:
+            let arr = ['a','b','c','d'];
+            for(let item of arr){
+                console.log(item)   =>a,b,c,d  输出的为数组的值
+            }
+            for(let item of arr.keys()){
+                console.log(item)   =>0,1,2,3  输出的为数组的下标
+            }
+            for(let item of arr.entries()){
+                console.log(item)   =>[0,a],[1,b],[2,c],[3,d]  输出结果为4个数组
+            }
+            for(let [index,item] of arr.entries()){
+                console.log(item)   =>index为数组下标，item为数组的值
+            }
+
+函数的扩展和箭头函数
+    箭头函数和普通函数的区别
+        1、箭头函数不能被实例化
+        2、箭头函数中this指向的是承接上下文的this，普通函数中this指向的是函数调用者
+        3、箭头函数不能被绑定参数，只能使用rest运算符
+
+    throw new Error('parse excel failed');  主动抛出异常
+    
+    严禁模式
+        'use strict'
+        es5中严谨模式补习写在js文件最上方，es6中规定严谨模式可以写在函数体或相关作用域中
+    
+    获得传递的参数个数
+        eg:
+            function test(a,b=1){
+                return a+b
+            }
+            console.log(test.length);  => 1  此个数为必须传递的参数个数，因为变量b有默认值，所以不是必须的
+
+对象的函数解构
+    解构
+        eg:
+            let obj = {
+                a:1,
+                b:2
+            }
+            function test({a,b:3}){
+                console.log(a)   =>1
+                console.log(b)   =>3
+            }
+            test(obj)
+    
+    in的用法
+        1、判断对象或数组中是否存在某个值
+            eg：
+                let obj = {
+                    a:1,
+                    b:2
+                }
+                console.log("a" in obj)  =>true
+
+        2、判断数组中指定位置是否有值
+            eg:
+                let arr = ["a"...];
+                console.log(1 in arr);  =>true
+                console.log(2 in arr);  =>false
+    
+    数组转换成字符串
+        arr.join();
+            eg:
+                let arr = [1,2,3]
+                console.log(arr.join());  =>'123'
+
+ES6中的对象
+    对象的赋值
+        eg:
+            let name = 'asdf';
+            let age = 12;
+            let obj = {name,age}
+            console.log(obj);  => {name:"asdf",age:12}
+    
+    key值得构建
+        eg:
+            let vab = 'asdf';
+            let obj = {
+                [vab] :'qwer' 
+            }
+            console.log(obj);  => {asdf:"qwer"}
+    
+    对象属性的的对比
+        Object.is(obj1,obj2);
+        eg:
+            let obj1 = {name:"asdf"}
+            let obj2 = {name:"asdf"}
+            console.log(Object.is(obj1.name,obj2.name));  =>true
+    
+    对象的合并
+        Object.assign(...);
+        eg:
+            let a = {a:1}
+            let b = {b:2}
+            let c = {d:3}
+            let d = Object.assign(a,b,c);  =>{a:1,b:2,c:3}
+
+Symbol =>全局标记
+    ES6中新增的数据类型,Symbol类型
+    声明方式：let f = Symbol()
+
+    Symbol类型在对象中构建key值
+        eg:
+            let f = Symbol("asdf");
+            let obj = {
+                [f]:"qwer"
+            }
+            *取值时使用方括号 console.log(obj[f]);  =>qwer
+            console.log(obj);  =>{Symbol(asdf):"qwer"}
+    
+    保护对象中的属性
+        eg；
+            let obj = {
+                name:"qwer",
+                sex:"boy",
+                age:18
+            }
+            for(let i in obj){
+                console.log(obj[i]);  =>  "qwer","boy",18
+            }
+            保护obj对象中的age属性
+            let obj = {
+                name:"qwer",
+                sex:"boy",
+            }
+            let age = Symbol();
+            obj[age] = 18;
+            for(let i in obj){
+                console.log(obj[i]);  =>  "qwer","boy"
+            }
+
+set和weakSet数据类型
+    set是ES6新规定的一种数据结构，内部只能存放数组，而且不能有重复值
+        声明方式：
+            eg:
+                let setArr = new Set(["name","age","sex"]);
+        
+        增
+            let setArr = new Set(["name","age","sex"]);
+            setArr.add("str");
+        
+        查
+            let setArr = new Set(["name","age","sex"]);
+            setArr.has("str");  返回true/false
+        
+        删
+            let setArr = new Set(["name","age","sex"]);
+            setArr.delete("str");  删除指定的值
+            setArr.clear();  删除所有值
+        
+        循环set数组
+            let setArr = new Set(["name","age","sex"]);
+            for(let i in setArr){
+                console.log(i);  "name","age","sex"
+            }
+            setArr.forEach((item,index)=>{
+                console.log(item);  "name","age","sex"
+            })
+        
+        获取set数组长度
+            let setArr = new Set(["name","age","sex"]);
+            setArr.size
+    
+    weakSet是ES6新规定的一种数据结构，内部只能存放对象
+        声明方式：
+            let weakObj = new WeakSet();
+        
+        插值
+            let weakObj = new WeakSet();
+            let obj = {name:"qwer",age:12}
+            weakObj.add(obj)
+
+map数据类型
+    ES6新规范的数据类型，key值可以为任意值，value也可以为任意值
+    声明
+        let map = new Map();
+
+    插值
+        let map = new Map();
+        map.set(key,value);
+
+    取值
+        let map = new Map();
+        map.get(key);
+
+    删除
+        删除指定的值
+            map.delete(key);   删除指定的值
+            map.clear();  删除所有值
+    
+    数据长度
+        map.size;  
+    
+    查找
+        map.has(key);  返回true/false
+
+Proxy预处理
+    增强对象和函数
+    在函数调用之前先预处理一下，相当于一种钩子函数
+    eg:
+        let obj = {
+            add:(val)=>return val+100
+        }
+        obj.add(100);
+        proxy的作用就是在调用obj.add()函数之前先预处理
+    
+    声明方式
+        let pro = new Porxy({
+            放对象体
+        },{
+            get(target,key[,property]){
+                在使用或调用对象体重某个属性或方法时，自动调用
+                target:整个对象体
+                key:对象体的某个属性名或方法名
+                return    =>返回的值为调用时输出的值
+            },
+            set(target,key,value,recerive){
+                target:整个对象体
+                key:对象体的某个属性名或方法名
+                value:对象体中，改变属性的新值
+                return target[key] = value
+            },
+            apply(){
+
+            }
+        })
+        get和set预处理的是调用或赋值对象体中某个属性时，
+        get:得到对象体中某个属性时，在得到之前被自动调用
+        set:设置对象体重某个属性时，在设置之前自动调用
+        apply:
+
 promist语法
     new promist((resolve,reject)={
         do somthing...
@@ -128,40 +546,6 @@ promist语法
             console.log(result); // 'P1'
         });
         因为p1执行的速度快，所以先返回，那么p2执行的结果将被遗弃
-
-let和const
-    let
-        声明变量，但是声明的变量只在let命令所在的代码块里有效
-        let声明的变量不存在声明提前，
-            eg:
-                console.log(a);  =>undefined
-                var a = 1;
-
-                console.log(b); =>报错
-                let b = 2;
-    const
-        声明一个只读的常量，声明后改变量不可被改变
-
-    顶层对象属性
-        es5中顶层意味着window窗口，顶层对象属性就是window的属性，所以顶层对象属性和全局变量是等价的。
-        顶层对象属性是可以在任何地方进行读写的，非常不利于模块化编程，所以es6中为了改变这一点，也为了保证兼容性，
-        var命令和function命令声明全局变量(顶层对象属性)，另一方面规定，let命令、const命令和class命令也可以声明全局变量，
-        但是，不属于顶层对象属性。也就是说从es6开始，全局变量将逐步和顶层对象属性脱钩。
-            eg:
-                var a = 1;
-                window.a  =>1;
-                let b = 1;
-                window.b =>undefined
-
-数组的解构和赋值
-    从数组和对象中提取值，对变量赋值，被称为解构(Destructuring)，如果解构不成功，变量的值就是undefined
-    事实上，只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值
-
-对象的解构和赋值
-    解构赋值的用途
-        1、交换变量的值
-        2、接受函数返回的多个值
-        3、提取JSON数据
     
 Map
     ES6中新的数据类型，键值对的结构。
@@ -179,46 +563,7 @@ Set
     set.add(key);
     set.delete(key);
 
-字符串的扩展
-    ES6加强了对unicode的支持，允许使用'\uxxxx'的形式来表示一个字符，其中xxxx表示字符的Unicode码，但是这种表示法只限于
-    码点在\u0000~\uFFFF之间的字，超出这个范围的字符必须使用双字节的形式来表示，
-    eg:
-        "\u0061" => a
-        "\uD842\uDFB7" => 吉
-        "\u20BB7" => 7
-    由于"\u20BB7"  超出了\uFFFF这个范围，JavaScript会理解成\u20BB + 7 ，由于\u20BB是一个不可打印的字符，所以只会显示一个
-    空格，后面跟着一个7，JavaScript对这一点做出了改进，只要将码点放入大括号中，JavaScript就能正确的解读这个码。
-    eg:
-        '\u{1F680}' === '\uD83D\uDE80'
-        "\u{20BB7}" => 吉
-    
-    ES6为字符串添加了遍历器接口，使得字符串可以被for...of循环遍历
-        eg:
-            let arr1 = [1,2,3,4,5]
-            for(let vari of arr1){
-                console.log(vari): => 1,2,3,4,5
-            }
-    
-    字符串模板
-        `this is es6 string model ${变量}`
-        在字符串模板中可以使用任意的JavaScript表达式以及对象属性
 
-        模板字符串中还可以调用函数
-            eg:
-                function func1(){
-                    console.log("function")
-                }
-                `func1 is a ${func1}`
-        
-        模板字符串内部就是执行JavaScript代码
-    
-    标签模板
-        相当于调用函数的另一种方式
-        function func1(a){
-            console.log(a);
-        }
-        正常调用 func1(a);
-        模板式调用  func1`a`
 
 字符串新API
     String.fromCodePoint(码点);
