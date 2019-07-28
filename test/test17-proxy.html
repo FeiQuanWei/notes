@@ -8,25 +8,38 @@
 </head>
 <body>
   <script>
-    let obj = {
+    // let obj = {
+    //   add(){
+    //     return val+100
+    //   },
+    //   name:"asdf"
+    // }
+    // let pro = new Proxy({
+    //   add(val){
+    //     return val+100
+    //   },
+    //   name:"asdf"
+    // },{
+    //   get(target,key,property){
+    //     console.log(target)
+    //     console.log(key)
+    //     return target
+    //   }
+    // })
+    // console.log(pro.name)
+    let target = {
       add(){
-        return val+100
-      },
-      name:"asdf"
-    }
-    let pro = new Proxy({
-      add(val){
-        return val+100
-      },
-      name:"asdf"
-    },{
-      get(target,key,property){
-        console.log(target)
-        console.log(key)
-        return target
+        return "asdf"
       }
-    })
-    console.log(pro.name)
+    }
+    let handler = {
+      apply(target,ctx,args){
+        console.log(args)
+        return Reflect.apply(...args)
+      }
+    }
+    let pro = new Proxy(target,handler);
+    console.log(pro.add());
     </script>
 </body>
 </html>
