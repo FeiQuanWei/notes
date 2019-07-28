@@ -3,3 +3,46 @@
     
   菲关系型数据库
     关系型数据库的阉割版，把少用或者根本不用的功能去掉，大幅度提高产品性能
+  
+在mongodb中数据表叫做集合，集合中一行一行的数据叫做文件
+
+快速存储能力和方便迅速查询能力
+
+基本命令
+  show dbs  =>查看所有数据库
+  db.version()  =>查看当前数据库版本
+  use 数据库名称  =>进入某个数据库，如果数据的数据库不存在，会创建这个数据库，并进入
+  show collections  =>展示数据库下的所有集合
+  db  =>查看当前所在数据库
+  db.dbName(数据库名称).insert()  =>向数据库中插入数据
+    eg:db.user.insert({"name":"asdf"})
+  db.dbName(数据库名称).find()  =>找到当前集合下的所有数据
+    eg:db.user.find()
+  db.dbName(数据库名称).findOne()  =>找到当前集合下的第一条数据
+    eg:db.user.findOne() 
+  db.dbName(数据库名称).update()  =>更改某条数据
+    eg:db.user.update({"name":"asdf"},{"name":"qwer","age":16})
+      将名字为asdf的这条数据改为name = qwer,age = 16
+  db.dbName(数据库名称).remove()  =>删除指定数据
+    eg:db.user.remove({"name":"玉皇大帝"})
+  db.dbName.drop()  =>删除整个集合
+    eg:db.user.drop()
+  db.dropDatabase()  =>删除当前所处在的集合
+  db.dbName.insert([{},{}])  =>批量插入  
+    eg:db.user.insert([
+      {"_id":1},
+      {"_id":2},
+      {"_id":3},
+    ])
+    低版本使用de.dbName.batchInsert()
+    批量插入时，数据最好不要超过48M
+  
+
+js写mongodb命令
+  eg:
+    var name = "asdf"
+    var time = Date.parse(new Date())
+    var jsonStr = {"username":name,"time":time}
+    var db = connect('log')  =>连接到集合，相当于use dbName
+    db.login.insert(jsonStr)  =>连接到集合，相当于use dbName
+    print('success');
