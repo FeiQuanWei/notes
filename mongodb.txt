@@ -46,3 +46,12 @@ js写mongodb命令
     var db = connect('log')  =>连接到集合，相当于use dbName
     db.login.insert(jsonStr)  =>连接到集合，相当于use dbName
     print('success');
+  
+update常见错误
+  1、当给mongodb更新数据时，使用db.dbName(数据库名).update({},{})
+    eg：db.user.update({name:1},{name:2})
+    当name=1这条数据更新后，此条数据仅剩name一个字段，
+    正确的修改方式
+      eg:db.user.update({name:1},obj)   ;第二个参数为正确的对象数据
+      
+  2、    

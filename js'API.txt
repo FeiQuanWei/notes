@@ -117,6 +117,7 @@
             })
             _sdArr  result=> [5]
             返回数组中大于4的值，返回的是由符合条件的值组成的数组
+    _.shuffle(Array);   打乱数组的排序，返回一个新数组
 
 其他API
     NumberObject.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
@@ -173,9 +174,6 @@
     
     Math.pow(2,53); 2的53次方
 
-    
-    
-    
-
-    _.shuffle(Array);  
-        打乱数组的排序，返回一个新数组
+    Function.apply(args1,args2) 
+        args1将代替Function中的this，
+        args2表示传入Function中的参数
