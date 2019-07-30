@@ -18,6 +18,12 @@
     eg:db.user.insert({"name":"asdf"})
   db.dbName(数据库名称).find()  =>找到当前集合下的所有数据
     eg:db.user.find()
+       db.user.find({name:1})  =>查找数据库中name = 1的所有数据，
+
+       当我们想让查找到的数据只显示某些字段时可以这么写
+       db.user.find({name:1},{name:true,age:true})
+       查找数据库中name=1的所有数据，并只显示name和age字段
+
   db.dbName(数据库名称).findOne()  =>找到当前集合下的第一条数据
     eg:db.user.findOne() 
   db.dbName(数据库名称).update()  =>更改某条数据
@@ -48,10 +54,115 @@ js写mongodb命令
     print('success');
   
 update常见错误
-  1、当给mongodb更新数据时，使用db.dbName(数据库名).update({},{})
+  当给mongodb更新数据时，使用db.dbName(数据库名).update({},{})
     eg：db.user.update({name:1},{name:2})
     当name=1这条数据更新后，此条数据仅剩name一个字段，
     正确的修改方式
       eg:db.user.update({name:1},obj)   ;第二个参数为正确的对象数据
       
-  2、    
+update修改器
+  $set修改器，修改指定数据的指定字段的值或者向指定数据添加某个字段
+    var db = connect('dbName=>数据库名字')
+    db.collections=>集合名字.update(
+      {name:1},  =>查找数据条件
+      {
+        $set:  {sex:2,age:20} =>要修改的数据及相关值 
+      }  
+    )
+
+    修改内嵌数据时
+      db.collections=>集合名字.update(
+        {name:1},  =>查找数据条件
+        {
+          $set:  {"skill.SkillThree":"word"} =>要修改的数据及相关值 
+        }  
+      )
+  
+  $unset删除=>删除指定字段
+    var db = connect('dbName');
+    db.collections.update({name:"1"},{$unset:{"name":""}}) 
+      =>删除name = 1这条数据的name字段
+
+  $inc  操作某条数据字段的值
+    var db = connect('dbName')
+    db.collections.update({name:"1"},{$inc:{age:-2}})  
+      =>使用$inc时可直接操作字段的值
+  
+  **multi选项  有坑，物踩
+    当要为集合中所有数据添加字段时,因为要给所有数据添加字段，所以条件不填
+      db.collections.update({},{$set,{"intreset":[]}})
+      执行完此条语句后你会发现，只有数据库中的第一条数据被添加了"intreset"字段
+    如果想为所有数据添加字段需添加multi选项
+      db.collections.update({},{$set,{"intreest":[]}},{multi:true});
+    
+  upsert选项
+    当想要更新集合中某条数据的某个值，但是这条数据不存在时，使用
+    db.collections.update({"name":1},{$set:{age:1}},{upsert:true})
+    使用该选项，当数据库中不存在name = 1的数据时，会自动向数据库中插入该条数据，name=1,age=2
+
+  upsert和multi可简写
+    db.collections.update({name:1},{进行操作},upsert,multi);
+
+update数组修改器
+  $push修改器
+    当一个字段的值为数组时，可以使用push向数组中追加值
+    eg:db.dbName.update({name:1},{$push:{interest:{"basketball"}}})
+
+  向内嵌数据追加值
+    eg:db.dbName.update({name:1},{$push:{"skill.SkillFour":{"basketball"}}})
+  
+  $ne修改器
+    查找数据中某条数据中指定字段是否有该值，如果有，则不添加，如果没有，就添加此值
+    db.dbName.update({name:1,interest:{$ne:"playgame"},{$push:{interest:"playgame"}})
+
+  $addToSet修改器  是$ne的升级版
+    db.dbName.update({name:1},{$addToSet:{interest:{"readbook"}}})
+    查找数据库中name=1的数据，如果该条数据中interest字段没有"readbook"该值，就向
+    该字段中添加该值
+
+  $each修改器  =>批量追加
+    var curArry = ["sing","dance","speak"]
+    db.dbName.update({name:1},{interset:{$each:curArry}})
+    添加功能，如果有则添加，如果没有则不添加
+    db.dbName.update({name:1},{$addToSet:{interset:{$each:curArry}}})
+
+  $pop修改器 有两个参数，第一个参数1/-1，-1表示从数组末端开始删除，1表示从头部开始删除
+    db.dbName.update({name:1},{$pop:{interest:1}})
+    查找到name=1的数据，并将字段"interest"的值从开头删除一个 ，1表示从开头删除
+
+  数组定位修改
+    db.dbName.update({name:1},{$set:{"interest.2":"asdf"}})
+    查找到name=1的数据，并将字段"interest"的值的第二位改成"asdf"
+
+状态返回与安全
+  非应答式操作 => 进行数据库操作后，并没有任何返回值
+    
+  应答式操作 =>进行数据库操作后，返回某值
+
+  db.runCommend()  => 命令，可以执行数据库命令，是数据库命令的执行器
+    eg:db.collections.update({},{},false,true);
+       db.runCommend({getLastError:1})
+       getLastError:1   =>  表示返回功能错误
+  
+  findAndModify
+    var myMostify = {
+      findAndModify:collections  =>  集合名称
+      query:{name:"asdf"},  =>  查找条件
+      update:{$set:{age:18}},  =>  更改的目标key及value
+      new:true  =>  true表示返回修改后的数据，false表示返回修改前的数据
+    }
+    var resultMessage = db.runCommend(myMostify)
+
+查询
+  find的不等边修饰符
+    小于($lt):less-than
+      db.collections.find(
+        {age:{$lt:40,$gt:18}},
+        {name:true,age:true}
+      )
+      查找数据库中年龄小于40大于18的所有数据，并只显示name和age
+      
+    小于等于($lte):less-than-equal
+    大于($gt):greater-than
+    大于等于($gte):greater-than-equal
+    不等于($ne):not-equal

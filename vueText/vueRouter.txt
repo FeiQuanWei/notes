@@ -1,0 +1,165 @@
+配置路由
+    npm install vue-router --save--dev
+    <router-link to="/page"></router-link>
+    export default new Router({
+        path:[
+            {
+                path:"/",   路由地址
+                name:"",   路由名称
+                component:""   跳转到路由后所加载的组件
+            }
+        ]
+    })
+
+子路由
+    <router-link to="/page[/child router]"></router-link>
+    export default new Router({
+        path:[
+            {
+                path:"/",   路由地址
+                name:"",   路由名称
+                component:""   跳转到路由后所加载的组件
+            }，
+            {
+                path:"/",   路由地址
+                name:"",   路由名称
+                component:""   跳转到路由后所加载的组件
+                children:[
+                    {
+                        path:"",   子路由不需要要斜杠
+                        name:"",
+                        component:""
+                    }
+                ]
+            }
+        ]
+    })
+
+传参
+    1、name传参法
+        在路由中定义name，页面中使用$route.name获取当前路由路径
+
+    2、<router-link :to="{name:'h1',params:{key:'value'},}"></router-link>
+        视图中
+            $route.params.key    
+        
+        *name的值必须和router中定义的值相同
+
+    3、 js传参
+        this.$router.push({
+            path: `/describe/${id}`,
+        })
+        对应路由设置
+        {
+            path:"/path/:{id}(正则)"    匹配id是否符合要求
+        }
+        获取参数
+        $route.params.id
+    
+    4、通过name来匹配路由
+        this.$route.push({
+            name:"a",
+            params:{
+                id:value
+            }
+        })
+        路由中定义
+        {
+            path:"/b",
+            name:"a",
+            component:
+        }
+        name上下文必须相同
+        获取参数
+            $route.params.id
+    
+    5、通过path来匹配路由
+        this.$route.push({
+            path:"/a",
+            query:{
+                id:value
+            }
+        })
+        路由设置
+        {
+            path:"/a",
+            name:"",
+            component:
+        }
+        获取参数
+        $route.query.id
+
+    params和query的区别在于通过params传递的参数不会再url中显示出来
+
+单页面多路由操作
+    页面定义多个路由视图
+    <router-view></router-view>
+    <router-view name="a"></router-view>
+    <router-view name="b"></router-view>
+
+    路由设置
+        {
+            path:"",
+            name:"",
+            components:{
+                default:"",
+                a:"",
+                b:""
+            }
+        }
+
+路由的重定向
+    {
+        path:"/a/:id(\\d+)",  目标路由
+        redirect:"/a/:id(\\d+)"   重新定向后的路由，传参方式相同  括号里为正则表达式
+    }
+
+alias的别名
+    {
+      path:"/header",
+      component:Header,
+      alias:"/header1"
+    }
+    alias和redirect的区别是alias没有改变URL地址，redirect改变了url地址
+
+路由的mode和404页面处理
+    路由配置
+        {
+            path:"*",
+            component:Error
+        }
+
+路由中的钩子函数
+    进入路由之前
+        在路由总配置钩子
+            {
+                path:"",
+                name:"",
+                component:"",
+                beforeEnter:(to,from,next)=>{
+                    console.log(to);   对象，到哪里去
+                    console.log(from);  对象，从哪里来
+                    console.log(next);  决定是否跳转
+                }
+            }
+            如果写了这个函数，那么路由将不会自己跳转，需使用函数中的next()才能继续跳转
+        
+        在组件中配置路由钩子
+            beforeRouterEnter:(to,from,next)=>{
+
+            }
+
+    离开路由之前
+        {
+            path:"",
+            name:"",
+            component:"",
+            beforeLeave:(to,from,next)=>{
+                console.log(to);   对象，到哪里去
+                console.log(from);  对象，从哪里来
+                console.log(next);  决定是否跳转
+            }
+        }
+
+编程式导航
+    

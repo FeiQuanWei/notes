@@ -1,0 +1,8 @@
+axios
+  get请求
+    axios('url').then((res)=>{
+
+    }).catch((err)=>{
+      
+    })
+  post请求
