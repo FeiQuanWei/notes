@@ -10,12 +10,18 @@
 
 基本命令
   show dbs  =>查看所有数据库
+
   db.version()  =>查看当前数据库版本
+
   use 数据库名称  =>进入某个数据库，如果数据的数据库不存在，会创建这个数据库，并进入
+
   show collections  =>展示数据库下的所有集合
+
   db  =>查看当前所在数据库
+  
   db.dbName(数据库名称).insert()  =>向数据库中插入数据
     eg:db.user.insert({"name":"asdf"})
+
   db.dbName(数据库名称).find()  =>找到当前集合下的所有数据
     eg:db.user.find()
        db.user.find({name:1})  =>查找数据库中name = 1的所有数据，
@@ -26,14 +32,19 @@
 
   db.dbName(数据库名称).findOne()  =>找到当前集合下的第一条数据
     eg:db.user.findOne() 
+
   db.dbName(数据库名称).update()  =>更改某条数据
     eg:db.user.update({"name":"asdf"},{"name":"qwer","age":16})
       将名字为asdf的这条数据改为name = qwer,age = 16
+
   db.dbName(数据库名称).remove()  =>删除指定数据
     eg:db.user.remove({"name":"玉皇大帝"})
+
   db.dbName.drop()  =>删除整个集合
     eg:db.user.drop()
+
   db.dropDatabase()  =>删除当前所处在的集合
+
   db.dbName.insert([{},{}])  =>批量插入  
     eg:db.user.insert([
       {"_id":1},
@@ -52,106 +63,107 @@ js写mongodb命令
     var db = connect('log')  =>连接到集合，相当于use dbName
     db.login.insert(jsonStr)  =>连接到集合，相当于use dbName
     print('success');
-  
-update常见错误
-  当给mongodb更新数据时，使用db.dbName(数据库名).update({},{})
-    eg：db.user.update({name:1},{name:2})
-    当name=1这条数据更新后，此条数据仅剩name一个字段，
-    正确的修改方式
-      eg:db.user.update({name:1},obj)   ;第二个参数为正确的对象数据
-      
-update修改器
-  $set修改器，修改指定数据的指定字段的值或者向指定数据添加某个字段
-    var db = connect('dbName=>数据库名字')
-    db.collections=>集合名字.update(
-      {name:1},  =>查找数据条件
-      {
-        $set:  {sex:2,age:20} =>要修改的数据及相关值 
-      }  
-    )
 
-    修改内嵌数据时
+update修改
+  update常见错误
+    当给mongodb更新数据时，使用db.dbName(数据库名).update({},{})
+      eg：db.user.update({name:1},{name:2})
+      当name=1这条数据更新后，此条数据仅剩name一个字段，
+      正确的修改方式
+        eg:db.user.update({name:1},obj)   ;第二个参数为正确的对象数据
+        
+  update修改器
+    $set修改器，修改指定数据的指定字段的值或者向指定数据添加某个字段
+      var db = connect('dbName=>数据库名字')
       db.collections=>集合名字.update(
         {name:1},  =>查找数据条件
         {
-          $set:  {"skill.SkillThree":"word"} =>要修改的数据及相关值 
+          $set:  {sex:2,age:20} =>要修改的数据及相关值 
         }  
       )
-  
-  $unset删除=>删除指定字段
-    var db = connect('dbName');
-    db.collections.update({name:"1"},{$unset:{"name":""}}) 
-      =>删除name = 1这条数据的name字段
 
-  $inc  操作某条数据字段的值
-    var db = connect('dbName')
-    db.collections.update({name:"1"},{$inc:{age:-2}})  
-      =>使用$inc时可直接操作字段的值
-  
-  **multi选项  有坑，物踩
-    当要为集合中所有数据添加字段时,因为要给所有数据添加字段，所以条件不填
-      db.collections.update({},{$set,{"intreset":[]}})
-      执行完此条语句后你会发现，只有数据库中的第一条数据被添加了"intreset"字段
-    如果想为所有数据添加字段需添加multi选项
-      db.collections.update({},{$set,{"intreest":[]}},{multi:true});
+      修改内嵌数据时
+        db.collections=>集合名字.update(
+          {name:1},  =>查找数据条件
+          {
+            $set:  {"skill.SkillThree":"word"} =>要修改的数据及相关值 
+          }  
+        )
     
-  upsert选项
-    当想要更新集合中某条数据的某个值，但是这条数据不存在时，使用
-    db.collections.update({"name":1},{$set:{age:1}},{upsert:true})
-    使用该选项，当数据库中不存在name = 1的数据时，会自动向数据库中插入该条数据，name=1,age=2
+    $unset删除=>删除指定字段
+      var db = connect('dbName');
+      db.collections.update({name:"1"},{$unset:{"name":""}}) 
+        =>删除name = 1这条数据的name字段
 
-  upsert和multi可简写
-    db.collections.update({name:1},{进行操作},upsert,multi);
-
-update数组修改器
-  $push修改器
-    当一个字段的值为数组时，可以使用push向数组中追加值
-    eg:db.dbName.update({name:1},{$push:{interest:{"basketball"}}})
-
-  向内嵌数据追加值
-    eg:db.dbName.update({name:1},{$push:{"skill.SkillFour":{"basketball"}}})
-  
-  $ne修改器
-    查找数据中某条数据中指定字段是否有该值，如果有，则不添加，如果没有，就添加此值
-    db.dbName.update({name:1,interest:{$ne:"playgame"},{$push:{interest:"playgame"}})
-
-  $addToSet修改器  是$ne的升级版
-    db.dbName.update({name:1},{$addToSet:{interest:{"readbook"}}})
-    查找数据库中name=1的数据，如果该条数据中interest字段没有"readbook"该值，就向
-    该字段中添加该值
-
-  $each修改器  =>批量追加
-    var curArry = ["sing","dance","speak"]
-    db.dbName.update({name:1},{interset:{$each:curArry}})
-    添加功能，如果有则添加，如果没有则不添加
-    db.dbName.update({name:1},{$addToSet:{interset:{$each:curArry}}})
-
-  $pop修改器 有两个参数，第一个参数1/-1，-1表示从数组末端开始删除，1表示从头部开始删除
-    db.dbName.update({name:1},{$pop:{interest:1}})
-    查找到name=1的数据，并将字段"interest"的值从开头删除一个 ，1表示从开头删除
-
-  数组定位修改
-    db.dbName.update({name:1},{$set:{"interest.2":"asdf"}})
-    查找到name=1的数据，并将字段"interest"的值的第二位改成"asdf"
-
-状态返回与安全
-  非应答式操作 => 进行数据库操作后，并没有任何返回值
+    $inc  操作某条数据字段的值
+      var db = connect('dbName')
+      db.collections.update({name:"1"},{$inc:{age:-2}})  
+        =>使用$inc时可直接操作字段的值
     
-  应答式操作 =>进行数据库操作后，返回某值
+    **multi选项  有坑，物踩
+      当要为集合中所有数据添加字段时,因为要给所有数据添加字段，所以条件不填
+        db.collections.update({},{$set,{"intreset":[]}})
+        执行完此条语句后你会发现，只有数据库中的第一条数据被添加了"intreset"字段
+      如果想为所有数据添加字段需添加multi选项
+        db.collections.update({},{$set,{"intreest":[]}},{multi:true});
+      
+    upsert选项
+      当想要更新集合中某条数据的某个值，但是这条数据不存在时，使用
+      db.collections.update({"name":1},{$set:{age:1}},{upsert:true})
+      使用该选项，当数据库中不存在name = 1的数据时，会自动向数据库中插入该条数据，name=1,age=2
 
-  db.runCommend()  => 命令，可以执行数据库命令，是数据库命令的执行器
-    eg:db.collections.update({},{},false,true);
-       db.runCommend({getLastError:1})
-       getLastError:1   =>  表示返回功能错误
-  
-  findAndModify
-    var myMostify = {
-      findAndModify:collections  =>  集合名称
-      query:{name:"asdf"},  =>  查找条件
-      update:{$set:{age:18}},  =>  更改的目标key及value
-      new:true  =>  true表示返回修改后的数据，false表示返回修改前的数据
-    }
-    var resultMessage = db.runCommend(myMostify)
+    upsert和multi可简写
+      db.collections.update({name:1},{进行操作},upsert,multi);
+
+  update数组修改器
+    $push修改器
+      当一个字段的值为数组时，可以使用push向数组中追加值
+      eg:db.dbName.update({name:1},{$push:{interest:{"basketball"}}})
+
+    向内嵌数据追加值
+      eg:db.dbName.update({name:1},{$push:{"skill.SkillFour":{"basketball"}}})
+    
+    $ne修改器
+      查找数据中某条数据中指定字段是否有该值，如果有，则不添加，如果没有，就添加此值
+      db.dbName.update({name:1,interest:{$ne:"playgame"},{$push:{interest:"playgame"}})
+
+    $addToSet修改器  是$ne的升级版
+      db.dbName.update({name:1},{$addToSet:{interest:{"readbook"}}})
+      查找数据库中name=1的数据，如果该条数据中interest字段没有"readbook"该值，就向
+      该字段中添加该值
+
+    $each修改器  =>批量追加
+      var curArry = ["sing","dance","speak"]
+      db.dbName.update({name:1},{interset:{$each:curArry}})
+      添加功能，如果有则添加，如果没有则不添加
+      db.dbName.update({name:1},{$addToSet:{interset:{$each:curArry}}})
+
+    $pop修改器 有两个参数，第一个参数1/-1，-1表示从数组末端开始删除，1表示从头部开始删除
+      db.dbName.update({name:1},{$pop:{interest:1}})
+      查找到name=1的数据，并将字段"interest"的值从开头删除一个 ，1表示从开头删除
+
+    数组定位修改
+      db.dbName.update({name:1},{$set:{"interest.2":"asdf"}})
+      查找到name=1的数据，并将字段"interest"的值的第二位改成"asdf"
+
+  状态返回与安全
+    非应答式操作 => 进行数据库操作后，并没有任何返回值
+      
+    应答式操作 =>进行数据库操作后，返回某值
+
+    db.runCommend()  => 命令，可以执行数据库命令，是数据库命令的执行器
+      eg:db.collections.update({},{},false,true);
+        db.runCommend({getLastError:1})
+        getLastError:1   =>  表示返回功能错误
+    
+    findAndModify
+      var myMostify = {
+        findAndModify:collections  =>  集合名称
+        query:{name:"asdf"},  =>  查找条件
+        update:{$set:{age:18}},  =>  更改的目标key及value
+        new:true  =>  true表示返回修改后的数据，false表示返回修改前的数据
+      }
+      var resultMessage = db.runCommend(myMostify)
 
 查询
   find的不等边修饰符
@@ -166,3 +178,61 @@ update数组修改器
     大于($gt):greater-than
     大于等于($gte):greater-than-equal
     不等于($ne):not-equal
+  
+  多条件查询
+    $in  =>  一个key多个value
+      db.collections.find({age:{$in:[25,33]}},{name:true})
+      查询集合中年龄为25和33的所有数据，并只显示name字段
+
+    $nin与$in相反，查询数据库中除了...以外的所有数据
+
+    $or  =>  多个条件满足一个即可
+      db.collections.find({$or:[{age:{$gte:30}},{"skill.skillThree":'PHP'}]})
+      查询集合中年龄大于30岁，或者第三个技能是php的所有数据
+    
+    $not  =>  除了查询条件之外的信息
+      db.collections.find({age:{$not:{$lt:30,$gt:20}})
+  
+  find的数组查询
+    db.collections.find({interest:["画画","聚会","看电影"]},{name:true,_id:false,age:1})
+    当查询的条件带[]时，表示要与数据库内响应字段的值完全匹配才能被查找到，
+
+    $all修改器
+      db.collections.find({interest:{$all:["画画","聚会"]}})
+        查询数据库中字段interest字段的值包含"画画","聚会"的所有数据
+
+    $in  =>  一个key多个value
+      db.collections.find({interest:{$in:[25,33]}},{name:true})
+        查询数据库中字段interest字段的值包含"画画"或者"聚会"的所有数据
+    
+    $size
+      db.collections.find({interest:{$size:5}},{})
+        查找数据库中interest字段的值的长度为5的数据
+    
+    $slice
+      db.collections.find({interest:{$size:5}},{name:1,interest:{$slice:1}})
+        查找数据库中interest字段的值的长度为5的数据,但是查找到的数据只显示interest字段的第一项，1表示从头开始显示一项，-1表示从末尾开始显示一项
+  
+  find参数使用方法
+    db.collections.find(query,fields,limit,skip,sort)
+    query => 查询条件 
+    fields => 查询到的结果的显示样式 true为显示，false为不显示
+    limit => 控制返回结果的数量
+    skip => 跳过多少个显示
+    sort => 排序  1为正序，-1为倒序
+  
+  $where
+    db.collections.find({$where:"this.age>30"},{})
+    $where不仅可以跟随JavaScript表达式，还可以跟随函数
+
+在js语句中使用find
+  hasNext()
+    eg:
+      var db = connect('company')
+      var result = db.workmate.find();
+      while(result.hasNext()){
+        printjson(result)
+      }
+
+mongodb的索引
+  
