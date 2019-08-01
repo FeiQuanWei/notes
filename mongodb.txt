@@ -234,5 +234,96 @@ update修改
         printjson(result)
       }
 
-mongodb的索引
+mongodb的索引  
+  不使用索引的情况
+    数据不过万时，不建议使用索引；
+    查询数据超过总数据的30%时，
+
+  查看索引
+    db.collections.getIndexes()
+    查看该集合中那个字段被设置为索引
+    
+  建立索引  =>  每个集合最多建立64个索引
+    => 3.0之前版本使用db.collections.ensureIndex() 之后使用db.collections.createIndex()
+    db.collections.ensureIndex({username:1})  1表示true，代表给username建立索引
+
+  符合索引
+    把数据的两个以上的字段设置为索引
   
+  指定索引查询
+    db.collections.find({}).hint({索引键值:1})  1表示为true
+  
+  删除索引
+    db.collections.dropIndex(indexName);  indexName为查询到的索引列表中的name属性的值
+
+  全文索引
+    在字段的值中想要检索到某些关键字时，需要全文索引
+    db.collections.createIndex({key:"text"});   => "text"表示对这个字段设置了全文索引
+
+    $text  =>  使用全文索引  $search => 检索关键字
+      db.collections.find({$text:{$search:"programmer"}}) 
+
+      检索多个单词
+      db.collections.find({$text:{$search:"programmer drink play"}}) 
+      "programmer drink play" 字符串之间是 "||" 的关系，不是 "&&" 关系
+
+      不希望查找到有相关单词的记录
+      db.collections.find({$text:{$search:"programmer drink -play"}}) 
+
+      查找字符，但是字符之间有空格  =>  使用转义字符
+      db.collections.find({$text:{$search:" \"qwer asdf \" zxcv "}})
+      查找"qwer asdf"或"zxcv" 
+
+管理MongoDB
+  创建用户
+  db.createUser({
+    user:"feiquanwei",  =>  用户名
+    pwd:"123456",  =>  密码
+    customData:{  =>  用户备注
+      name:"技术",  =>  备注用户名
+      email:"",  =>  邮箱
+      age:18  =>  邮箱
+    },
+    ①roles:['read']  =>  权限，这种写法是给所有的库设置权限
+
+    ②roles:[{   =>  这种写法是给用户设置指定的库的权限
+      role:"",  =>  权限名
+      db:"company"  =>  数据库名
+    }]  =>  权限
+  })
+
+查询用户
+  db.system.users.find()  查询数据库中所有用户
+
+删除用户
+  db.system.users.remove({user:"用户名"})
+
+建权(建立权限)
+  db.auth("username","pwd");  返回1成功，返回0失败
+  建权成功后需要重启mongodb服务器，不能使用mongod启动服务器，使用mongod --auth启动服务器
+  使用建权启动服务器后，不能再使用mongo链接数据库了，需使用建权的用户名和密码链接，mongo -u "用户名" -p "密码" ip地址/admin(数据库名)
+
+备份和还原
+  备份
+    备份整个数据库
+      mongodump
+        --host 127.0.0.1  => ip
+        --port 27017  => 端口号
+        --out D:/databack/backup  => 备份到的位置
+
+    备份指定集合
+      mongodump
+        --host 127.0.0.1  => ip
+        --port 27017  => 端口号
+        --out D:/databack/backup  => 备份到的位置
+        --collection myCollections  => 备份的集合
+        --db test  => 备份的库
+        --username username
+        --password password
+  还原
+    mongorestore
+    --host 127.0.0.1
+    --port 27017
+    --username username
+    --password password
+    <path to the backup>  =>  曾经备份到的地址
