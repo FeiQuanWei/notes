@@ -1,0 +1,13 @@
+db.createUser({
+  user:"fqw",
+  pwd:"123456",
+  customData:{
+    name:"asdf",
+    email:"123456789@qq.com",
+    age:18
+  },
+  roles:[{
+    role:"root",
+    db:"admin"
+  }]
+})
