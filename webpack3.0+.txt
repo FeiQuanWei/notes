@@ -1,11 +1,14 @@
 什么是webpack
   模块打包器
 
+不推荐使用全局安装webpack，因为在构建不同版本的webpack项目时，可能会出现差异，当项目使用webpack时，会默认使用全局安装的webpack
+
 作用
   分析项目，查找到项目中不能直接被浏览器识别的语言，将其转换并打包为合适的格式供浏览器分析识别
 
 基本命令
-  1、webpack 源文件 -o 目标文件     =>将源文件打包成目标文件
+  1、webpack 源文件 -o 目标文件     =>将源文件打包成目标文件  或
+     webpack 目标文件路径 --output-filename 输出文件路径 --output-path . --mode development
     eg:webpack ./src/entery.js -o dist/bundle.js
 
 安装live-server
