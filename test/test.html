@@ -5,12 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        body,html{
+            padding:0px;
+            margin:0px;
+        }
+        .asdf{
+            height:100vh;
+            background-color:#ddd;
+            /* display:flex; */
+            /* flex-direction:column; */
+        }
+        .qwer{
+            height:150px;
+            background-color:#fff;
+            flex-shrink: 0;
+        }
+        .zxcv{
+            height:calc(100%-150px);
+            background-color:#aaa;
+        }
+        .zxcv>div{
+            height:100%;
+        }
+        .zxcv>div>div{
+            height:200px
+        }
+    </style>
 </head>
 <body>
-    <script>
+    <div class="asdf">
+        <div class="qwer"></div>
+        <div class="zxcv">
+            <div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+            </div>
+        </div>
+    </div> 
+    <!-- <script>
         var test = setInterval(function(property1){
             console.log(property1)
         },1000,"这个是参数")
-    </script>
+    </script> -->
 </body>
 </html>
