@@ -7,15 +7,290 @@
   分析项目，查找到项目中不能直接被浏览器识别的语言，将其转换并打包为合适的格式供浏览器分析识别
 
 基本命令
-  1、webpack 源文件 -o 目标文件     =>将源文件打包成目标文件  或
+  1、webpack 源文件 -o 目标文件 --mode development     =>将源文件打包成目标文件  或
      webpack 目标文件路径 --output-filename 输出文件路径 --output-path . --mode development
     eg:webpack ./src/entery.js -o dist/bundle.js
 
 安装live-server
   需全局安装 sudo npm install live-server -g
 
-项目结构
-  .node_module  --插件存储文件夹
-  .src  --源文件夹
-  .dist
-    .index.html
+配置webpack.config.js
+  const path = require("path");
+  module.exports = {
+    entry:{  =>  入口
+      entry:""
+      entry2:""  如果有多入口的话
+    },
+    output:{
+      path:"",
+      filename:""  =>  如果有多入口，此项变成filename:'[name].js'
+    },  =>  出口
+    module:{},  =>  模块：例如解读CSS,图片如何转换，压缩
+    plugins:[]  =>  插件，用于生产模版和各项功能
+    devServer:{}  =>  配置webpack开发服务功能
+  }
+
+热更新  =>  所见即所得
+  安装插件webpack-dev-server 
+    npm install webpack-dev-server --save--dev
+  
+  配置webpack.config.js 
+    devServer:{
+      contentBase:path.resolve(__diranem,'dist');  =>  设置项目的目录
+      host:'localhost',  =>  服务器ip地址
+      compress:true, =>  是否开启服务器端压缩
+      port:1717  =>  端口号
+    }
+    配置package.json,在scripts中增加属性"server":"webpack-dev-server"
+    然后本地安装webpack-cli,执行命令 npm install webpack-cli --save--dev
+    最后终端输入命令  =>  npm run server   然后浏览器端打开devServer中配置的ip+port
+
+css文件打包
+  需要安装两个module，css-loader和style-loader
+  style-loader  =>  将css插入到页面的style标签中
+  css-loader  =>  加载css文件
+  然后在webpack.config.js中的module属性中添加字段
+    rule:{
+      test:/\.css$/,  =>  匹配将要处理的文件名后缀的正则表达式
+
+      写法①uses:['style-loader','css-loader']  =>  使用的模块名称
+      写法②loader:['style-loader','css-loader'] 
+      写法③use:[
+        {
+          loader:'style-loader'
+        },
+        {
+          loader:'css-loader'
+        }
+      ]
+
+      include/exclude:,  =>  可不用
+      query:  =>  可不用
+    }
+
+压缩js
+  使用uglifyjs插件,已经集合在webpack中，所以不需要再次本地安装
+  需要在webpack.config.js中引入uglifyjs，
+    var uglify = require('uglify')
+  然后在属性plugins中使用
+    plugin:[new uglify()]
+  最后使用webpack打包
+
+打包html
+  安装html-wepack-plugin  
+    npm install html-webpack-plugin
+  配置webpack.config.js
+    const htmlPlugin = require('html-webpack-plugin');
+    在plugin属性中添加
+      new htmlPlugin({
+        minify:{  =>  是对html文件进行压缩
+          removeAttributeQuotes:true  =>  去掉属性中的引号
+        },
+        hash:true,  =>  是否使用hash，避免js缓存
+        template:"./src/index.html"  =>  要打包的html文件路径
+      }) 
+
+css中图片的处理
+  安装file-loader和url-loader
+    npm install --save--dev file-loader url-loader
+
+  url-loader  => 将过大的图片转为base64格式
+  file-loader  =>  当图片过大时，用来加载本地图片
+
+  在webpack.config.js中配置
+    module字段增加配置
+      {
+        test:/\.(png|jpg|gif)/,  =>  匹配的文件后缀
+        use:[{
+            loader:'url-loader',  =>  使用的模块
+            options:{  
+                limit:500000  =>  大小限制，吧小于500000byte的文件打包成base64的格式，写入js
+            }
+        }]
+      }
+  
+CSS分离与图片路径处理  =>  使用插件extract-text-webpack-plugin
+  分离  =>  把css从js中分离出来
+  路径处理  =>  处理分离出来后，css中图片路径不对问题
+
+  安装插件extract-text-webpack-plugin
+    npm install extract-text-webpack-plugin
+  
+  配置webpack.config.js
+    插件需要引入，模块不需要引入
+      const extractTextPlugin = require('extract-text-webpack-plugin');
+
+    在plugin字段中添加
+      new extractTextPlugin("/css/index.css");  =>  /css/index.css是分离后的路径位置
+    
+    修改css-loader
+      {
+        test: /\.css$/,
+        use: extractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      }
+    
+    修改webpack.config.js中的output属性
+      var website ={
+          publicPath:"http://192.168.1.108:1717/"
+      }
+      在output中增加属性  =>  主要作用就是处理静态文件路径的
+        publicPath:website.publicPath
+      
+    使用webpack打包
+    如果中断报错，请将extract-text-webpack-plugin插件升级到最新版
+      npm install extract-text-webpack-plugin@next
+
+处理html中的图片
+  安装html-withimg-loader
+    npm install html-withimg-loader --save--dev
+  
+  配置webpack.config.js
+    在module中增加属性
+      {
+        test:/\.(htm|html)$/i,
+        use:['html-withimg-loader']
+      }
+
+  当本地没安装webpack时，本地使用webpack命令可能会报错，结局方法如下
+  配置package.json
+    scripts:{
+      "build":"webpack"
+    }
+  
+  将打包后的图片放入images文件夹中
+    配置webpack.config.js
+      {
+          test:/\.(png|jpg|gif)/ ,
+          use:[{
+              loader:'url-loader',
+              options:{
+                  limit:5000,
+                  outputPath:'images/',   =>  增加此属性
+              }
+          }]
+      }
+
+less文件的打包和分离
+  本地安装less和less-loader
+    npm install less less-loader --save--dev
+
+  配置webpack.config.js 
+    在module中增加属性
+    {
+      test: /\.less$/,
+      use: extractTextPlugin.extract({
+        use:[{
+            loader: "css-loader" // translates CSS into CommonJS
+        },{
+            loader: "less-loader" // compiles Less to CSS
+        }]
+      }),
+      fallback:'style-loader',
+    }
+
+sass文件的打包和分离
+  本地安装sass-loader和node-sass,因为sass-loader依赖于node-sass,所以要先安装node-sass
+    npm i node-sass --save--dev
+    npm i sass-loader --save--dev
+  
+  建立scss文件
+
+  配置webpack.config.js
+    {
+      test:/\.scss$/,
+      use:extractTextPlugin.extract({
+        use:[
+          {
+            loader:'css-loader'
+          },
+          {
+            loader:'sass-loader'
+          }
+        ],
+        fallback:'style-loader'
+      })
+    }
+
+处理css3属性前缀,列入-webkit-等
+  安装postcss-loader和autoprefixer
+    npm i postcss-loader autoprefixer --save--dev
+  
+  建立postcss.config.js文件，与webpack.config.js同级，并插入以下内容
+    module.exports = {
+      plugins: [
+            require('autoprefixer')
+        ]
+    }
+  
+  配置webpack.config.js
+    {
+      test: /\.css$/,
+      use: extractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+              { loader: 'css-loader', options: { importLoaders: 1 } },
+              'postcss-loader'
+          ]
+      })
+    }
+
+消除未使用的css
+  使用purifyCSS-webpack插件,purifyCSS-webpack依赖于purify-css,所以两个都要安装
+  npm i -D purifycss-webpack purify-css   -D表示--save--dev
+  
+  配置webpac.config.js
+    因为要同步检查html，所以webpack.config.js中还要引入glob
+    const glob = require('glob');
+    const PurifyCSSPlugin = require('purifyCSS-webpack');
+  
+  在webpack.config.js的plugin字段增加属性
+    new PurifyCSSPlugin({
+      path:glob.sync(path.join(__dirname,'src/*.html'))
+    })
+
+给webpack增加babel支持
+  babel是js编译器，用来转换js语法，webpack是前端自动化工具
+  安装babel几个核心的包
+    babel-loader babel-core babel-preset-es2015 babel-preset-react
+    npm install -D babel-loader @babel/core @babel/preset-env
+
+  配置webpack.config.js,在module中增加属性
+    {
+      test:/\.(jsx|js)$/,
+      use:{
+          loader:'babel-loader',
+          options:{
+              presets:[
+                  "es2015","react"
+              ]
+          }
+      },
+      exclude:/node_modules/
+    }
+  
+  虽然babel可以在webpack.config.js中配置，但是考虑到babel中有很多配置，所以会将babel配置卸载.babelrc文件中
+    .babelrc
+      {
+        "preset":["es2015","react"]
+      }
+
+    webpack.config.js
+      {
+        test:/\.(jsx|js)$/,
+        use:{
+            loader:'babel-loader'
+        },
+        exclude:/node_modules/
+      }
+  
+  现在babel-preset-es2015已经不流行，可以使用babel-preset-env
+    .babelrc
+      {
+        "preset":["@babel/preset-env"]
+      }
+
+打包后如何测试
+  0
