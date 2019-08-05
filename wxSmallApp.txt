@@ -4,3 +4,33 @@
   })
   因为小程序中的数据都在页面中进行了绑定，所以当直接使用"="赋值时，打印出来的变量虽然已经被赋值了，但是页面显示数据没有刷新，
   所以小程序中，推荐使用以上方法进行对变量的赋值
+
+  小程序页面之间传值的方法
+    ①通过url
+      A页面代码
+        <navigator class="active" url="/pages/play/play?id=380">首页</navigator>
+        或js
+          let id = 380
+          wx.navigateTo({
+            url:"/asdf/asdf?id="+id
+          })
+      B页面代码
+        目标页面获取参数  =>  在小程序生命周期的钩子函数中
+          onload(option){
+            option.id  =>  380
+          }
+    
+    ②本地存储
+      A页面代码
+        let id = 380;
+        wx.setStorageSycn("id",id)
+      B页面代码
+        let id = wx.getStorageSycn("id")  =>  380
+    
+    ③全局app
+      A页面代码 
+        var app = getApp();
+        app.id = 380
+      B页面代码
+        var app = getApp();
+        let id = app.id  =>  380
