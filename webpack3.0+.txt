@@ -294,3 +294,145 @@ sass文件的打包和分离
 
 打包后如何测试
   0
+
+开发和生产并行设置
+  npm i  => 安装所有依赖包
+  npm i --production  =>  安装生产依赖包
+  
+  之前配置了变量websit，用来配置静态资源正确找到路径，当生产环境和开发环境的ip不一样时，我们需要切换配置的路径
+    修改package.json  window系统
+      "scripts":{
+        "server": "webpack-dev-server --open",
+        "dev":"set type=dev&webapck",
+        "build": "set type=build&webpack"
+      }
+      Mac系统
+        "scripts": {
+          "server": "webpack-dev-server --open",
+          "dev":"export type=dev&&webpack",
+          "build": "export type=build&&webpack"
+        },
+
+    修改webpack.config.js 
+      if(process.env.type== "build"){
+          var website={
+              publicPath:"http://192.168.0.104:1717/"   =>  开发环境
+          }
+      }else{
+          var website={
+              publicPath:"http://cdn.jspang.com/"  =>  生产环境
+          }
+      }
+
+webpack模块化配置
+  新建webpack_config文件夹，在此文件夹下新建entry_webpack.js同级，并插入以下内容 
+    //声明entry变量
+    const entry ={};  
+    //声明路径属性
+    entry.path={
+        entry:'./src/entry.js'  
+    }
+    //进行模块化
+    module.exports =entry;
+
+  配置webpack.config.js
+    const entry = require("./webpack_config/entry_webpack.js")
+    将entry属性改变为
+      entry:entry.path
+
+优雅的打包第三方库  1️以jquery为例
+  第一种
+    安装所需第三方库
+      npm i jquery --save
+    在js中使用import引入
+      import $ from 'jquery'
+  
+  第二种，在webpack.config.js中配置插件
+    使用webpack自带的ProvidePlugin插件，因为ProvidePlugin是webpack自带的，所以需要引入webpack
+      const webpack = require('webpack');
+
+    修改webpack.config.js
+      plugins:[
+        new webpack.ProvidePlugin({
+          $:"jquery"
+        })
+      ]
+
+watch的正确使用方法
+  初级开发阶段，使用webpack-dev-server可以充当服务器，但是，当随着项目的进一步开发，需要前后端联调或前端代码合并时
+  就需要一台公共服务器，这时候，我们每次修改完代码，然后手动打包的效率就很低，所以，我们希望，当我们自动保存代码后，webpack就
+  会自动帮我们进行打包，这时我们就需要使用工具watch
+
+  配置webpack.config.js
+    watchOptions:{
+      //检测修改的时间，以毫秒为单位
+      poll:1000, 
+      //防止重复保存而发生重复编译错误。这里设置的500是半秒内重复保存，不进行打包操作
+      aggregateTimeout:500, 
+      //不监听的目录
+      ignored:/node_modules/, 
+    }
+  
+webpack优化黑技能
+  import和ProvidePlugin对比
+    import引入后，不管你以后是否在项目中使用该库时，该库都会被打包，
+    ProvidePlugin引入后，只有项目中使用该库时，该库才会被打包
+
+  第三方库的抽离  =>  以jquery为例
+    第一步，修改入口文件，修改webpack.config.js
+      entry:{
+        entry:"./src/entry.js",
+        jquery:"jquery"
+      }
+    第二步，引入优化插件optimize，因为optimize也集成到webpack中
+      plugin:[
+        new webpack.optimize.CommonsChunkPlugin({
+            //name对应入口文件中的名字，我们起的是jQuery
+            name:'jquery',
+            //把文件打包到哪里，是一个路径
+            filename:"assets/js/jquery.min.js",
+            //最小打包的文件模块数，这里直接写2就好
+            minChunks:2
+        }),
+      ]
+      filename可以不写，文件会被默认打包到根目录下
+  
+  多个第三方库抽离  =>  加入vue
+    第一步，修改入口文件，修改webpack.config.js
+      entry:{
+        entry:"./src/entry.js",
+        jquery:"jquery"
+      }
+    第二步，修改webpack.config.js
+      new webpack.optimize.CommonsChunkPlugin({
+        //name对应入口文件中的名字，我们起的是jQuery
+        name:['jquery','vue'],
+        //把文件打包到哪里，是一个路径
+        filename:"assets/js/[name].js",
+        //最小打包的文件模块数，这里直接写2就好
+        minChunks:2
+      }),
+    
+静态资源集中输出
+  使用copy-webpack-plugin插件
+  安装插件
+    npm i copy-webpack-plugin --save--dev
+  
+  配置webpack.config.js
+    引入插件
+      const copyWebpackPlugin= require("copy-webpack-plugin");
+    
+    编辑plugin字段
+      new copyWebpackPlugin({
+        from:__dirname+'/src/public',   =>  要打包的静态资源
+        to:'./public'  =>  打包到...目录下
+      })
+
+热更新与热加载
+  热更新是重新刷新整个页面
+  热加载是局部进行重新加载
+    启动热加载，使用HotModuleReplacementPlugin
+    配置webpack.config.js
+      plugins:[
+        new webpack.HotModuleReplacementPlugin()
+      ]

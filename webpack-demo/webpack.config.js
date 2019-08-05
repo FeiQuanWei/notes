@@ -4,13 +4,16 @@ const htmlPlugin = require('html-webpack-plugin');
 const extractTextPlugin = require('extract-text-webpack-plugin');
 const purifyCssPlugin = require('purifycss-webpack');
 const glob = require('glob');
+const webpack = require('webpack');
+const copyWebpackPlugin= require("copy-webpack-plugin");
 var website ={
   publicPath:"http://127.0.0.1:8080/dist"
 }
 
 module.exports = {
   entry:{
-    entry:"./src/entry.js"
+    entry:"./src/entry.js",
+    jquery:'jquery'
   },
   output:{
     path:path.resolve(__dirname,"dist"),
@@ -92,7 +95,14 @@ module.exports = {
     new extractTextPlugin("/css/index.css"),
     new purifyCssPlugin({
       paths:glob.sync(path.join(__dirname,('src/*.html')))
-    })
+    }),
+    new webpack.ProvidePlugin({
+      $:'jquery'
+    }),
+    new copyWebpackPlugin([{
+      from:__dirname+'/src/public',
+      to:'./public'
+    }])
   ],
 
   mode:"development",
@@ -101,5 +111,15 @@ module.exports = {
     host:"127.0.0.1",
     compress:true,
     port:8080
-  }
+  },
+  // ,
+  // watch: true,
+  // watchOptions:{
+  //   //检测修改的时间，以毫秒为单位
+  //   poll:1000, 
+  //   //防止重复保存而发生重复编译错误。这里设置的500是半秒内重复保存，不进行打包操作
+  //   aggregateTimeout:500, 
+  //   //不监听的目录
+  //   ignored:/node_modules/, 
+  // }
 }
