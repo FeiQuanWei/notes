@@ -22,3 +22,85 @@ JavaScript友好语言指的是能够使用其他语法实现，但最终编译�
 相关命令
   lsof -i:端口号  查看端口号被哪个进程占用，
   kill id 杀死指定进程
+
+nodejs适用于哪些场景
+  I/O绑定应用程序
+  数据库应用程序
+  数据密集型实时应用程序(实时聊天)
+  基于JSON API的应用程序
+  单页面应用程序
+
+不适用与哪些程序
+  cpu密集型程序
+
+什么是回调
+  回调是异步的等价物，就是在给定任务完成时调用回调函数，node所有的API都支持回调
+
+Nodejs是单线程应用程序，但是可以通过【事件和回调】完成并发，nodejs的所有的api都是异步(回调函数方式)的并且单线程的，
+它们使用异步函数调用(回调函数方式)来维护并发性，节点使用观察者模式。节点线程保持事件循环，并且每当任务完成时，
+它都会触发相应的事件，该事件表示要执行的事件侦听器函数。
+
+节点应用如何工作？
+  在节点应用程序中，任何异步函数都接受回调作为最后一个参数，并且回调函数接受错误作为第一个参数
+
+事件发射器
+  nodejs中很多对象都会发出事件，发出事件的所有对象都是events.EventEmitter的实例
+  当EventEmitter实例出错时，会触发"错误事件"，添加新的监听器时，会触发newListener事件，删除监听器时，会触发removeListener事件
+
+fs(文件读取模块)
+  同步(阻塞)
+    var fs = require('fs');
+    var readData = fs.readFileSync('file path');  =>  读取到的文件内容为数据流
+    console.log(readData.toString())
+    console.log('read over')
+
+  异步(非阻塞)
+    var fs = require('fs');
+    var readData = fs.readFile('file path',function(err,data){
+      if(err){
+        consle.log(err)
+      }else{
+        console.log(data.toString())
+      }
+    });
+    console.log('read over')
+
+事件驱动编程
+  var events = require('events')
+  var eventEmitter = new event.EventEmitter()
+  eventEmitter.on('event name',event handler function);  =>  将事件与事件处理器绑定
+  eventEmitter.emit('event name');  =>  主动触发某事件
+
+  相关api
+    .newListener('event name',event handler function)   =>  每次添加时间监听器时都会触发此事件
+    .addListener('event name',event handler function)   =>  和on一样
+    .once('event name',event handler function)  =>  添加一次性监听器，
+    .removeListener('event name',event handler function)  =>  移除监听器
+    .removeAllListeners()  =>  移除所有事件监听器
+    .setMaxListeners(num)  =>  设置监听器最大数量
+    .listeners()  =>  返回所有所有监听器数组
+    .emit(arg1[,arg2[,arg3]])  ==>  主动触发指定监听器
+    .listenerCount(eventEmitter,'event handler funcion')  =>  返回时间发射器设置的事件监听器的数量
+
+buffer缓冲区
+  var buf = new Buffer(10);  =>  创建一个长度为10个字节的缓冲区
+  var buf = new Buffer([10, 20, 30, 40, 50]);  =>  指定数组的缓冲区
+  var buf = new Buffer("Simply Easy Learning", "utf-8");  =>  指定字符串的缓冲区，并指定字符串编码格式
+
+  写入缓冲区
+    buf.write(string[,offset][,length][,encoding])
+      string  =>  写入缓冲区的字符数据
+      offset  =>  开始写入缓冲区的索引(数组或字符串下标)
+      length  =>  写入的字符长度，默认为string的长度
+      encoding  =>  编码格式，默认utf8
+
+      当缓冲区的长度不够时，字符只能写入部分内容
+  
+  从缓冲区读取数据
+    buf.toString([encoding][,start][,end])
+      encoding  =>  要使用的编码。'utf8'是默认编码。
+      start  =>  读取的开始位置(数组或字符串的下标)
+      end  =>  结束位置(数组或字符串的下标)
+  
+  将buffer转为json
+    buf.toJSON()
