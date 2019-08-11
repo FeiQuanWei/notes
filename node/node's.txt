@@ -56,6 +56,7 @@ fs(文件读取模块)
 
   异步(非阻塞)
     var fs = require('fs');
+    var readData = fs.readFile(path,function(err,data){
       if(err){
         consle.log(err)
       }else{
