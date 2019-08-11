@@ -50,13 +50,12 @@ Nodejs是单线程应用程序，但是可以通过【事件和回调】完成�
 fs(文件读取模块)
   同步(阻塞)
     var fs = require('fs');
-    var readData = fs.readFileSync('file path');  =>  读取到的文件内容为数据流
+    var readData = fs.readFileSync('path');  =>  读取到的文件内容为数据流
     console.log(readData.toString())
     console.log('read over')
 
   异步(非阻塞)
     var fs = require('fs');
-    var readData = fs.readFile('file path',function(err,data){
       if(err){
         consle.log(err)
       }else{
@@ -64,6 +63,78 @@ fs(文件读取模块)
       }
     });
     console.log('read over')
+  
+  打开文件
+    fs.open(path,flags[,mode],callback)
+      path  =>  打开文件的路径
+      flags  =>  打开文件的行为
+        r  =>  打开文件进行阅读，如果文件不存在，则发生异常
+        r+  =>  打开文件进行读写
+        rs  =>  打开文件以同步模式进行读取
+        rs+  =>  打开文件进行读写，要求操作系统同步打开
+        w  =>  打开文件进行写作。如果文件不存在则创建
+        wx  =>  像'w'，但如果路径存在则失败。
+        w+  =>  同W
+        wx+  =>  同wx
+        a  =>  打开文件进行追加。如果文件不存在，则创建该文件
+        ax  =>  像'a'，但如果路径存在则失败。
+        a+  =>  打开文件进行阅读和追加。如果文件不存在，则创建该文件。
+        ax+  =>  像'a +'一样，但如果路径存在则失败。
+      mode  =>  打开文件的模式
+      callback  =>  回调函数
+
+    fs.stat(path,callback);
+      path  =>  文件路径
+      callback(err,stats)  =>  回调函数
+        stats  =>  stats是fs.Stats类型的对象
+          stats.isFile()  =>  判断是否是简单的文件类型
+          stats.isDirectory()  =>  判断是否是文件夹
+          stats.isBlockDevice()  =>  
+          stats.isCharacterDevice()
+          stats.isSymbolicLink
+          stats.isFIFO
+          stats.isSocket
+    
+    fs.writeFile(filename,data[,options],callback)
+      创建并写入文件，如果文件存在，则覆盖原文件，如果向已经存在的文件内写入，使用其他方法
+      filename  =>  文件路径
+      data  =>  写入文件的数据
+      options  =>  {encoding,mode,flag} 默认编码为utf8,模式为八进制模式，flag为w
+  
+  阅读文件  =>  此方法使用文件描述符来读取文件，如果想直接使用文件名读取文件则使用其他方法
+    fs.readFile(fd,buffer,offset,length,position,callback)
+      fd  =>  fs.open()返回的文件描述符
+      buffer  =>  这是将数据写入的缓冲区
+      offset  =>  这是缓冲区中开始写入的偏移量
+      length  =>  这是一个整数，指定要读取的字节数
+      position  =>  整数，指定从文件中开始读取的位置
+      callback(err,bytesRead,buffer)  =>
+
+  关闭文件
+    fs.close(fd,callback);
+      fd  =>  这是文件fs.open（）方法返回的文件描述符。
+      callback(err)
+  
+  截断文件
+    fs.ftruncate(fd, len, callback)
+      fd  =>  这是fs.open（）返回的文件描述符。
+      len  =>  这是文件的长度，之后文件将被截断
+      callback(err)
+  
+  删除文件
+    fs.unlink(path,callback)
+      path  =>  这是包含路径的文件名。
+
+  创建目录
+    fs.mkdir(path[, mode], callback)
+
+  读取目录
+    fs.readdir(path, callback)
+      callback(err,files)  
+        file  =>  该目录下的所有文件
+  
+  删除目录
+   fs.removedir(path,callback)
 
 事件驱动编程
   var events = require('events')
@@ -86,6 +157,7 @@ buffer缓冲区
   var buf = new Buffer(10);  =>  创建一个长度为10个字节的缓冲区
   var buf = new Buffer([10, 20, 30, 40, 50]);  =>  指定数组的缓冲区
   var buf = new Buffer("Simply Easy Learning", "utf-8");  =>  指定字符串的缓冲区，并指定字符串编码格式
+  由于安全性考虑，现在不推荐使用buffer(),使用Buffer.alloc()，fer.allocUnsafe()，Buffer.from()
 
   写入缓冲区
     buf.write(string[,offset][,length][,encoding])
@@ -103,4 +175,208 @@ buffer缓冲区
       end  =>  结束位置(数组或字符串的下标)
   
   将buffer转为json
-    buf.toJSON()
+    var bufJson = buf.toJSON()
+  
+  拼接buffer
+    var bufConnect = Buffer.connect([buffer list][,totalLength])
+  
+  比较缓冲区
+    var result = buf1.compare(buf2); 返回值为数字，result<0表示排序之前，=0表示相同，>0表示排序后
+  
+  复制缓冲区
+    var lastBuf = buf.copy(targetBuffer[, targetStart][, sourceStart][, sourceEnd])
+    targetBuffer  =>  复制的目标buffer 
+    targetStart  =>  从哪个位置开始复制(数组或字符串的下标)
+    sourceStart  =>  复制到缓冲区的开始位置(数组或字符串的下标)
+    sourceEnd  =>  复制到缓冲区的结束位置(数组或字符串的下标)
+  
+  截取缓冲区
+    buf.slice([start][, end])
+      start  =>  开始位置
+      end  =>  结束位置(数组或字符串的下标，不包括结束位置的内容)
+
+  其他api
+    Buffer.isEncoding('encoding')  =>  校验缓冲区编码
+    Buffer.isBuffer(OBJ)  =>  该对象是否为buffer对象
+    Buffer.byteLength(string[,encoding])  =>  返回字符串的实际字符长度
+
+stream流
+  流是允许您以连续方式从源读取数据或将数据写入目标的对象
+  在nodejs中有4种形态的stream
+    可读(Readable)
+    可写(writable)
+    Duplex
+    变换(transform)
+  每一个stream都是eventEmitter的实例，并在不同时间触发响应时间
+    data  =>  开始读取数据时触发
+    end  =>  数据读取完成后触发
+    error  =>  当读取或写入有任何错误时触发
+    finish  =>  当所有数据都刷新到底层数据时触发
+  
+  读取流
+    var fs = require('fs');
+    var readStream = fs.createReadStream('input path');
+    readStream.on('data',function(chunk){  =>  当读取流开始读取数据时触发
+
+    })
+    readStream.on('end',function(){  =>  当读取流读取结束时触发
+      console.log('read over')
+    })
+    readStream.on('error',function(err){  =>  当读取流读取出错时触发
+      console.log(err)
+    })
+    readStream.on('error',function(err){  =>  当读取流读取出错时触发
+      console.log(err)
+    })
+  
+  写入流
+    var fs = require('fs');
+    var writeStream = require('output path');
+    writeStream.write('data','encoding');
+    writerStream.end();
+    writerStream.on('finish', function() {
+      console.log("Write completed.");
+    });
+    writerStream.on('error', function(err) {
+      console.log(err.stack);
+    });
+  
+  管道流
+    将一个流的输出作为一个流的写入
+    var fs = require('fs')
+    var readStream = fs.createReadStream('input.txt');
+    var writeStream = fs.createWriteStream('output.txt');
+    readStream.pipe(writeStream)
+  
+  链式流
+    链接是一种将一个流的输出连接到另一个流并创建多个流操作链的机制。它通常用于管道操作。
+
+全局对象
+  __filename  =>  表示当前执行脚本的文件名
+    console.log(__filename)
+
+  __dirname  =>  表示当前脚本所在的目录
+    console.log(__dirname)
+
+  setTimeout()
+  clearTimeout()
+  setInterval()
+  clearInterval()
+  console
+    console.log()
+    console.info()
+    console.error()
+    console.warn()
+    console.dir()
+    console.time()
+    console.timeEnd()
+    console.trace()
+    console.assert
+
+  process  =>  获取当前进程的相关信息
+  os  =>  提供与操作系统相关的基本实用程序功能
+    var os = require('os);
+      os.tmpdir();  =>  返回操作系统临时文件的默认目录
+      os.endianness();  =>  返回CPU的字节顺序。可能的值为“BE”或“LE”。
+      os.hostname();  =>  返回操作系统的主机名
+      os.type();  =>  返回操作系统名称
+      os.platform();  =>  返回操作系统平台
+      os.arch();  =>  返回操作系统CPU体系结构。可能的值为“x64”，“arm”和“ia32”。
+      os.release();  =>  返回操作系统版本
+      os.uptime();  =>  以秒为单位返回系统正常运行时间
+      os.loadavg();  =>  返回包含1分钟，5分钟和15分钟负载平均值的数组
+      os.totalmem()  =>  以字节为单位返回系统内存总量
+      os.freemem()  =>  以字节为单位返回可用系统内存量
+      os.cpus()  =>  返回一个对象数组，其中包含有关安装的每个CPU /核心的信息：模型，速度（以MHz为单位）和
+        时间（包含CPU /核心所用的毫秒数的对象：user，nice，sys，idle和irq）
+      os.networkInterfaces()  =>  获取网络接口列表
+
+  path  =>  路径模块用于处理和转换文件路径
+    path.normalize(p)  =>  规范化字符串路径，处理'..'和'.' 部分。
+    path.join([path1][, path2][, ...])  =>  将所有参数连接在一起并规范化生成的路径
+    path.resolve([from ...], to)  =>  解析为绝对路径
+    path.isAbsolute(path)  =>  确定路径是否为绝对路径。无论工作目录如何，绝对路径始终会解析到同一位置。
+    path.relative(from, to)  =>  解决从到的相对路径
+    path.dirname(path)  =>  返回路径的目录名称
+    path.basename(path[, ext])  =>  返回路径的最后一部分
+    path.extname(p)  =>  返回路径的扩展名，从最后一个'。' 到路径的最后部分的字符串结尾。如果没有'。' 
+      在路径的最后一部分或它的第一个字符是'。'，然后它返回一个空字符串。
+    path.parse(pathString)  =>  从路径字符串返回一个对象
+    path.format(pathObject)  =>  返回一个对象的路径字符串
+  net  =>
+    var net = require("net")
+      1、net.createServer([options][, connectionListener])  =>创建一个新的TCP服务器。
+        connectionListener参数自动设置为“connection”事件的侦听器。
+      2、net.connect(options[, connectionListener])  =>  一种工厂方法，它返回一个新的'net.Socket'并连接到提供的地址和端口。
+      
+      3、net.createConnection(options[, connectionListener])  =>  一种工厂方法，它返回一个新的'net.Socket'并连接到提供的地址和端口
+      
+      4、net.connect(port[, host][, connectListener])  =>  创建到主机端口的TCP连接。如果省略host，则假定为“localhost”。
+        connectListener参数将添加为'connect'事件的侦听器。它是一个返回新的'net.Socket'的工厂方法。
+
+      5、net.createConnection(port[, host][, connectListener])  =>  创建到主机端口的TCP连接。如果省略host，则假定为“localhost”。
+        connectListener参数将添加为'connect'事件的侦听器。它是一个返回新的'net.Socket'的工厂方法
+      
+      6、net.connect(path[, connectListener])  =>  
+        创建到路径的Unix套接字连接。connectListener参数将添加为'connect'事件的侦听器。它是一个返回新的'net.Socket'的工厂方法
+      
+      7、net.createConnection(path[, connectListener])
+        创建到路径的Unix套接字连接。connectListener参数将添加为'connect'事件的侦听器。它是一个返回新的'net.Socket'的工厂方法
+
+      8、net.isIP(input)  =>  
+        测试输入是否为IP地址。对于无效字符串，返回0，对于IP4地址，返回4，对于IP6地址，返回6
+      
+      9、net.isIPv4(input)   =>  如果输入是IP4地址，则返回true，否则返回false。
+      9、net.isIPv6(input)   =>  如果输入是IP6地址，则返回true，否则返回false。
+
+  dns  =>
+    dns.lookup(hostname[, options], callback)
+    dns.lookupService(address, port, callback)
+    dns.resolve(hostname[, rrtype], callback)
+      rrtype相关值及其代表含义
+        A − 默认值，IPV4地址
+        AAAA −  IPV6地址
+        MX − 邮件交换记录
+        TXT − 邮件交换记录
+        SRV − SRV记录
+        PTR − 邮件交换记录
+        NS − name server records
+        CNAME − canonical name records
+        SOA − start of authority record
+    dns.resolve4(hostname, callback)
+    dns.resolve6(hostname, callback)
+    dns.resolveMx(hostname, callback)
+    dns.resolveTxt(hostname, callback)
+    dns.resolveSrv(hostname, callback)
+    dns.resolveSoa(hostname, callback)
+    dns.resolveNs(hostname, callback)
+    dns.resolveCname(hostname, callback)
+    dns.reverse(ip, callback)
+    dns.getServers()
+    dns.setServers(servers)
+
+  domain  =>  用于拦截未处理的错误。可以使用内部绑定或外部绑定拦截这些未处理的错误
+    内部绑定 - 错误发射器正在域的run方法中执行其代码。
+    外部绑定 - 使用其add方法将错误发射器显式添加到域。
+    相关方法
+      domain.run(function)
+        在域的上下文中运行提供的函数，隐式绑定在该上下文中创建的所有事件发射器，计时器和低级请求。这是使用域的最基本方式
+      domain.add(emitter)
+        确地向域添加发射器。如果发射器调用的任何事件处理程序抛出错误，或者发射器发出错误事件，
+          它将被路由到域的错误事件，就像使用隐式绑定一样。
+      domain.remove(emitter)
+        与domain.add（发射器）相反。从指定的发射器中删除域处理。
+      domain.bind(callback)
+        返回的函数将是提供的回调函数的包装器。调用返回的函数时，抛出的任何错误都将路由到域的错误事件
+      domain.intercept(callback)
+        此方法与domain.bind（回调）几乎完全相同。但是，除了捕获抛出的错误之外，它还将拦截作为函数的第一个参数发送的Error对象
+      domain.enter()
+        enter方法是run，bind和intercept方法用来设置活动域的管道。它将domain.active和process.domain设置为域，
+        并隐式地将域推送到域模块管理的域堆栈（有关域堆栈的详细信息，请参阅domain.exit（））。
+        对enter的调用分隔了绑定到域的异步调用链和I / O操作的开始。
+      domain.exit()
+        exit方法退出当前域，将其从域堆栈中弹出。每当执行切换到不同的异步调用链的上下文时，确保退出当前域很重要。
+        对exit的调用分隔了异步调用链的结束或中断以及绑定到域的I / O操作。
+      domain.dispose()
+        一旦调用dispose，域将不再被通过run，bind或intercept绑定到域中的回调使用，并且dispose事件将被释放
+      domain.members
