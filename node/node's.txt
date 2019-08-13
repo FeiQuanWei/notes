@@ -252,6 +252,17 @@ stream流
   链式流
     链接是一种将一个流的输出连接到另一个流并创建多个流操作链的机制。它通常用于管道操作。
 
+express  =>  Express是一个最小且灵活的Node.js Web应用程序框架，它提供了一组强大的功能来开发Web和移动应用程序。
+              它有助于基于节点的Web应用程序的快速开发
+  提供静态文件
+    Express提供了一个内置的中间件express.static来提供静态文件
+    您只需将保存静态资产的目录名称传递给express.static中间件即可直接开始提供文件
+    en:
+      var express = require('express');
+      var app = express();
+      app.use(express.static('public'));
+
+
 全局对象
   __filename  =>  表示当前执行脚本的文件名
     console.log(__filename)
