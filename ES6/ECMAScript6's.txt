@@ -157,7 +157,7 @@ export、export default和import
 
     事实上，只要某种数据结构具有 Iterator 接口，都可以采用数组形式的解构赋值
 
-扩展运算符和rest运算符
+扩展运算符
     扩展运算符作用
         1、调用方法时，不确定传参的数量，可用扩展运算符
             eg:
@@ -186,12 +186,6 @@ export、export default和import
                 arr2.push(4);
                 console.log(arr2); => [1,2,3,4]
                 console.log(arr1); => [1,2,3]
-
-    rest运算符
-        function test(first,...arr){
-            console.log(arr.length);  => 6
-        }
-        test(1,2,3,4,5,6,7)
 
 字符串的扩展
     字符串模板
@@ -289,26 +283,76 @@ export、export default和import
                 console.log(item)   =>index为数组下标，item为数组的值
             }
 
-函数的扩展和箭头函数
-    函数的默认参数
-        
-    箭头函数和普通函数的区别
+函数的扩展
+    1、函数的默认参数
+        eg:
+            function log(x,y = 'world'){}
+        注意事项
+            1、默认参数不能再函数内部进行重新的定义
+            2、使用参数默认值时，函数不能有同名参数。
+    
+    2、默认参数位置
+        函数的默认参数一般都放在函数参数的最后一位，这样比较容易看出来，到底省略了哪些参数。
+        如果非尾部的参数设置默认值，实际上这个参数是没法省略的。
+
+    3、箭头函数和普通函数的区别
         1、箭头函数不能被实例化
-        2、箭头函数中this指向的是承接上下文的this，普通函数中this指向的是函数调用者
+        2、箭头函数中this指向的是定义时所在的对象，而不是使用时所在的对象，普通函数中this指向的是函数调用者
         3、箭头函数不能被绑定参数，只能使用rest运算符
 
-    throw new Error('parse excel failed');  主动抛出异常
+    4、throw new Error('parse excel failed');  主动抛出异常
     
-    严禁模式
+    5、函数的length属性  =>  没有默认值的函数参数个数
+
+    6、作用域
+        0
+
+    7、严禁模式
         'use strict'
         es5中严谨模式补习写在js文件最上方，es6中规定严谨模式可以写在函数体或相关作用域中
-    
-    获得传递的参数个数
+
+    8、rest运算符
+        function test(first,...arr){
+            console.log(arr.length);  => 6
+        }
+        test(1,2,3,4,5,6,7)
+
+    9、获得传递的参数个数
         eg:
             function test(a,b=1){
                 return a+b
             }
             console.log(test.length);  => 1  此个数为必须传递的参数个数，因为变量b有默认值，所以不是必须的
+
+    10、函数的name属性,返回该函数的函数名。
+        eg:
+            function foo() {}
+            foo.name  =>  "foo"
+        构造函数的name返回anonymous
+            eg:
+                (new function).name = anonymous
+
+    11、箭头函数
+        eg:
+            var f = v => v
+            相当于
+            var f = function(v){
+                return v
+            }
+
+        如果箭头函数不需要参数或需要多个参数，就使用一个圆括号代表参数部分
+            eg:
+                var f = ()=>5
+                    等同于
+                var f = function(){
+                    return 5
+                }
+
+        如果箭头函数的代码块部分多于一条语句，就要使用大括号将它们括起来，并且使用return语句返回
+            eg；
+                var sum = (num1, num2) => { return num1 + num2; }
+                由于大括号被解释为代码块，所以如果箭头函数直接返回一个对象，必须在对象外面加上括号，否则会报错
+                let getTempItem = id => ({ id: id, name: "Temp" });
 
 对象的函数解构
     解构
@@ -478,7 +522,7 @@ map数据类型
     
 Proxy预处理
     增强对象和函数
-    在函数调用之前先预处理一下，相当于一种钩子函数
+    在函数或变量使用之前先预处理一下，相当于一种钩子函数
     eg:
         let obj = {
             add:(val)=>return val+100
@@ -493,12 +537,12 @@ Proxy预处理
             get(target,key[,property]){
                 在使用或调用对象体重某个属性或方法时，自动调用
                 target:整个对象体
-                key:对象体的某个属性名或方法名
-                return    =>返回的值为调用时输出的值
+                key:操作的对象体的某个属性
+                return  =>  返回的值为调用时输出的值
             },
             set(target,key,value,recerive){
                 target:整个对象体
-                key:对象体的某个属性名或方法名
+                key:操作的对象体的某个属性
                 value:对象体中，改变属性的新值
                 return target[key] = value
             },
