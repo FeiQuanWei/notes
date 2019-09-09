@@ -353,6 +353,11 @@ export、export default和import
                 var sum = (num1, num2) => { return num1 + num2; }
                 由于大括号被解释为代码块，所以如果箭头函数直接返回一个对象，必须在对象外面加上括号，否则会报错
                 let getTempItem = id => ({ id: id, name: "Temp" });
+        注意：
+            1、箭头函数中this的指向，指向的是函数定义生效时所在的对象
+            2、不可以当作构造函数，也就是说，不可以使用new命令，否则会抛出一个错误。
+            3、不可以使用arguments对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。
+            4、不可以使用yield命令，因此箭头函数不能用作 Generator 函数
 
 对象的函数解构
     解构
