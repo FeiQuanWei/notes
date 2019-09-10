@@ -174,6 +174,28 @@
     
     Math.pow(2,53); 2的53次方
 
-    Function.apply(args1,args2) 
-        args1将代替Function中的this，
-        args2表示传入Function中的参数
+    call、apply和bind
+        call改变this指向
+            eg；
+                var obj = {}
+                function f(){
+                    return this
+                }
+                f();  =>  window
+                f.call(obj)  =>  obj
+                可传多个参数
+                    f.call(obj,arg1,arg2...)  =>  obj为this新指向的对象，arg1和arg2为传入函数的参数
+
+        apply与call方法相似
+            eg:
+                var obj = {}
+                function f(){
+                    return this
+                }
+                f();  =>  window
+                f.apply(obj)  =>  obj
+                可传多个参数
+                    f.call(obj,[arg1,arg2...])  =>  obj为this新指向的对象，arg1和arg2为传入函数的参数，arg1和arg2必须在一个数组里
+        
+        bind用于将函数体内的this绑定到一个对象上
+            
