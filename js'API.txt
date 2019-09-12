@@ -53,6 +53,12 @@
     Object.create(obj)  =>  返回一个新对象，该对象的原型对象为obj
         创建对象原型对象
 
+    Object.preventExtensions(obj)  =>  将obj变成不可扩展的对象
+        返回已不可扩展的原对象
+
+    Object.isExtensible(obj)  =>  判断一个对象是否可以扩展
+        返回boolean
+
 字符串api
     str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
         startIndex开始位置下标，endIndex结束位置下标，截取字符串不包括结束位置的字符
