@@ -25,9 +25,8 @@
 
         由于 undefined 和 null 无法转为对象，所以如果第一个参数是 undefined 或 null，就会报
         
-    Object.getPrototypeOf(obj);
-        获取一个对象的原型对象
-
+    Object.getPrototypeOf(obj);  =>  获取一个对象的原型对象
+        
     Object.assign(target,...sources)
         将所有可枚举属性的值从一个或多个源对象赋值给另一个对象，
         返回一个新对象，如果属性名相同，那么属性值将会被覆盖
@@ -58,6 +57,9 @@
 
     Object.isExtensible(obj)  =>  判断一个对象是否可以扩展
         返回boolean
+    
+    Object.key(obj)  =>  返回一个有对象本身可枚举的属性组成的数组
+    
 
 字符串api
     str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
