@@ -454,9 +454,44 @@ ES6中的对象
             let c = {d:3}
             let d = Object.assign(a,b,c);  =>{a:1,b:2,c:3}
 
-Symbol =>全局标记
-    ES6中新增的数据类型,Symbol类型
-    声明方式：let f = Symbol()
+Symbol  =>  ES6中新增的第七种数据类型，表示独一无二的值，其他6中为boolean，object，number，string，undefined，null
+    1、Symbol出现以后，对象的属性名可以有两种类型：字符串、Symbol,凡是属性名属于 Symbol 类型，就都是独一无二的，可以保证不会与其他属性名产生冲突
+        声明方式：let f = Symbol()
+
+    2、Symbol函数可以接受一个字符串作为参数，表示对 Symbol 实例的描述，主要是为了在控制台显示，或者转为字符串时，比较容易区分
+        声明方式：let f = Symbol('asdf')
+                 f  =>  Symbol(asdf)
+                 f.toString()  =>  "Symbol(asdf)"
+
+    3、Symbol 值不能与其他类型的值进行运算
+        eg:
+            let sym = Symbol('My symbol');
+            "your symbol is " + sym  =>  TypeError: can't convert symbol to string
+            `your symbol is ${sym}  =>  TypeError: can't convert symbol to string
+
+    4、Symbol.prototype.description  =>  获得Symbol类型的数据的描述
+        let sy = Symbol('adsf')
+        console.log(sy)  =>  Symbol(adsf)
+        console.log(sy.description)  =>  asdf
+
+    5、作为属性名的 Symbol
+        写法：let sy = Symbol();
+            ①、let a = {}
+               a[sy] = 'Hello!';
+            ②、let a = {
+                [sy]:'Hello!'
+            }
+            ③、let a = {}
+               Object.defineProperty(a, mySymbol, { value: 'Hello!' });
+        注：Symbol 值作为对象属性名时，不能用点运算符
+
+    6、属性名的遍历
+        ymbol 作为属性名，该属性不会出现在for...in、for...of循环中，也不会被Object.keys()、Object.getOwnPropertyNames()、JSON.stringify()返回。
+        但是，它也不是私有属性，有一个Object.getOwnPropertySymbols方法，可以获取指定对象的所有 Symbol 属性名
+
+        Object.getOwnPropertySymbols方法返回一个数组，成员是当前对象的所有用作属性名的 Symbol 值。
+        Reflect.ownKeys方法可以返回所有类型的键名，包括常规键名和 Symbol 键名
+        
 
     Symbol类型在对象中构建key值
         eg:
@@ -801,7 +836,13 @@ Reflect  =>  ES6为了操作对象而提供的新 API,
         12、Reflect.preventExtensions(target)  =>  用于让一个对象变为不可扩展
         13、Reflect.ownKeys(target)  =>  返回由该对象所有属性组成的数组
         *14、观察者模式  =>  观察者模式（Observer mode）指的是函数自动观察数据对象，一旦对象有变化，函数就会自动执行
+            0
 
+Generator函数
+    0
+
+async函数  =>  Generator函数的语法糖
+    0
 
 promist语法
     new promist((resolve,reject)={
