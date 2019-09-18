@@ -117,7 +117,7 @@
             array.reverse()
             result=> [4562,46,34,2,7,4,1];
 
-    Arrat.filter()   寻找数组中符合某条件的值，并返回
+    Array.filter()   寻找数组中符合某条件的值，并返回
         eg:var arr = [1,2,3,4,5];
             var _sdArr = arr.filter((a)=>{
                 return a>4
@@ -125,6 +125,7 @@
             _sdArr  result=> [5]
             返回数组中大于4的值，返回的是由符合条件的值组成的数组
     _.shuffle(Array);   打乱数组的排序，返回一个新数组
+    arr0.concat(arr1,arr2,arr3,arr4)  =>  将arr0与arr1,arr2,arr3,arr4合并，并返回一个新数组
 
 Number
     Number.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
