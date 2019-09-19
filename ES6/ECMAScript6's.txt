@@ -454,6 +454,104 @@ ES6中的对象
             let c = {d:3}
             let d = Object.assign(a,b,c);  =>{a:1,b:2,c:3}
 
+set和weakSet数据类型
+    set是ES6新规定的一种数据结构，内部只能存放数组，而且不能有重复值
+        声明方式：
+            eg:
+                let setArr = new Set(["name","age","sex"]);
+        
+        增
+            let setArr = new Set(["name","age","sex"]);
+            setArr.add("str");
+        
+        查
+            let setArr = new Set(["name","age","sex"]);
+            setArr.has("str");  返回true/false
+        
+        删
+            let setArr = new Set(["name","age","sex"]);
+            setArr.delete("str");  删除指定的值
+            setArr.clear();  删除所有值
+        
+        循环set数组
+            let setArr = new Set(["name","age","sex"]);
+            for(let i in setArr){
+                console.log(i);  "name","age","sex"
+            }
+            setArr.forEach((item,index)=>{
+                console.log(item);  "name","age","sex"
+            })
+        
+        获取set数组长度
+            let setArr = new Set(["name","age","sex"]);
+            setArr.size
+    
+    weakSet是ES6新规定的一种数据结构，内部只能存放对象
+        声明方式：
+            let weakObj = new WeakSet();
+        
+        插值
+            let weakObj = new WeakSet();
+            let obj = {name:"qwer",age:12}
+            weakObj.add(obj)
+
+map数据类型
+    ES6新规范的数据类型，key值可以为任意值，value也可以为任意值
+    ES6中新的数据类型，键值对的结构。
+    *初始化Map需要一个二维数据或一个空数组
+    声明
+        let map = new Map();
+
+    插值
+        let map = new Map();
+        map.set(key,value);
+
+    取值
+        let map = new Map();
+        map.get(key);
+
+    删除
+        删除指定的值
+            map.delete(key);   删除指定的值
+            map.clear();  删除所有值
+    
+    数据长度
+        map.size;  
+    
+    查找
+        map.has(key);  返回true/false
+ 
+Reflect  =>  ES6为了操作对象而提供的新 API,
+    Reflect对象的方法与Proxy对象的方法一一对应，只要是Proxy对象的方法，就能在Reflect对象上找到对应的方法
+
+    相关API
+        1、Reflect.get(target,property)  =>  查找并返回target对象的property属性
+        2、Reflect.set(target,property,value,receiver)  =>  设置target对象的property属性等于value
+        3、Reflect.has(obj,property[,])  =>  查看property是否是obj的属性，返回boolean
+        4、Reflect.deleteProperty(obj,property)  =>  删除obj中的property属性
+        5、Reflect.construct(target, args)  =>  提供了一种不使用new，来调用构造函数的方法
+            eg：
+                function Greeting(name) {
+                    this.name = name;
+                }
+
+                // new 的写法
+                const instance = new Greeting('张三');
+
+                // Reflect.construct 的写法
+                const instance = Reflect.construct(Greeting, ['张三']);
+        
+        6、Reflect.getPrototypeOf(obj)  =>  读取对象的__proto__属性
+        7、Reflect.setPrototypeOf(obj, newProto)  =>  设置目标对象的原型（prototype）,返回boolean
+        8、Reflect.apply(func, thisArg, args)  =>  给func绑定指定this,传入参数args，并触发func
+        9、Reflect.defineProperty(target, propertyKey, attributes)  =>  基本等同于Object.defineProperty，用来为对象定义属性
+        10、Reflect.getOwnPropertyDescriptor(target, propertyKey)  =>  得到指定属性的描述对象
+        11、Reflect.isExtensible(target)  =>  当前对象是否可扩展
+        12、Reflect.preventExtensions(target)  =>  用于让一个对象变为不可扩展
+        13、Reflect.ownKeys(target)  =>  返回由该对象所有属性组成的数组
+        *14、观察者模式  =>  观察者模式（Observer mode）指的是函数自动观察数据对象，一旦对象有变化，函数就会自动执行
+            0
+
 Symbol  =>  ES6中新增的第七种数据类型，表示独一无二的值，其他6中为boolean，object，number，string，undefined，null
     1、Symbol出现以后，对象的属性名可以有两种类型：字符串、Symbol,凡是属性名属于 Symbol 类型，就都是独一无二的，可以保证不会与其他属性名产生冲突
         声明方式：let f = Symbol()
@@ -533,74 +631,9 @@ Symbol  =>  ES6中新增的第七种数据类型，表示独一无二的值，�
         
         ③、
 
+Generator函数
+    0
 
-set和weakSet数据类型
-    set是ES6新规定的一种数据结构，内部只能存放数组，而且不能有重复值
-        声明方式：
-            eg:
-                let setArr = new Set(["name","age","sex"]);
-        
-        增
-            let setArr = new Set(["name","age","sex"]);
-            setArr.add("str");
-        
-        查
-            let setArr = new Set(["name","age","sex"]);
-            setArr.has("str");  返回true/false
-        
-        删
-            let setArr = new Set(["name","age","sex"]);
-            setArr.delete("str");  删除指定的值
-            setArr.clear();  删除所有值
-        
-        循环set数组
-            let setArr = new Set(["name","age","sex"]);
-            for(let i in setArr){
-                console.log(i);  "name","age","sex"
-            }
-            setArr.forEach((item,index)=>{
-                console.log(item);  "name","age","sex"
-            })
-        
-        获取set数组长度
-            let setArr = new Set(["name","age","sex"]);
-            setArr.size
-    
-    weakSet是ES6新规定的一种数据结构，内部只能存放对象
-        声明方式：
-            let weakObj = new WeakSet();
-        
-        插值
-            let weakObj = new WeakSet();
-            let obj = {name:"qwer",age:12}
-            weakObj.add(obj)
-
-map数据类型
-    ES6新规范的数据类型，key值可以为任意值，value也可以为任意值
-    ES6中新的数据类型，键值对的结构。
-    *初始化Map需要一个二维数据或一个空数组
-    声明
-        let map = new Map();
-
-    插值
-        let map = new Map();
-        map.set(key,value);
-
-    取值
-        let map = new Map();
-        map.get(key);
-
-    删除
-        删除指定的值
-            map.delete(key);   删除指定的值
-            map.clear();  删除所有值
-    
-    数据长度
-        map.size;  
-    
-    查找
-        map.has(key);  返回true/false
-    
 Proxy预处理
     增强对象和函数
     在函数或变量使用之前先预处理一下，相当于一种钩子函数
@@ -818,39 +851,8 @@ Proxy预处理
         0
 
 
-Reflect  =>  ES6为了操作对象而提供的新 API,
-    Reflect对象的方法与Proxy对象的方法一一对应，只要是Proxy对象的方法，就能在Reflect对象上找到对应的方法
 
-    相关API
-        1、Reflect.get(target,property)  =>  查找并返回target对象的property属性
-        2、Reflect.set(target,property,value,receiver)  =>  设置target对象的property属性等于value
-        3、Reflect.has(obj,property[,])  =>  查看property是否是obj的属性，返回boolean
-        4、Reflect.deleteProperty(obj,property)  =>  删除obj中的property属性
-        5、Reflect.construct(target, args)  =>  提供了一种不使用new，来调用构造函数的方法
-            eg：
-                function Greeting(name) {
-                    this.name = name;
-                }
 
-                // new 的写法
-                const instance = new Greeting('张三');
-
-                // Reflect.construct 的写法
-                const instance = Reflect.construct(Greeting, ['张三']);
-        
-        6、Reflect.getPrototypeOf(obj)  =>  读取对象的__proto__属性
-        7、Reflect.setPrototypeOf(obj, newProto)  =>  设置目标对象的原型（prototype）,返回boolean
-        8、Reflect.apply(func, thisArg, args)  =>  给func绑定指定this,传入参数args，并触发func
-        9、Reflect.defineProperty(target, propertyKey, attributes)  =>  基本等同于Object.defineProperty，用来为对象定义属性
-        10、Reflect.getOwnPropertyDescriptor(target, propertyKey)  =>  得到指定属性的描述对象
-        11、Reflect.isExtensible(target)  =>  当前对象是否可扩展
-        12、Reflect.preventExtensions(target)  =>  用于让一个对象变为不可扩展
-        13、Reflect.ownKeys(target)  =>  返回由该对象所有属性组成的数组
-        *14、观察者模式  =>  观察者模式（Observer mode）指的是函数自动观察数据对象，一旦对象有变化，函数就会自动执行
-            0
-
-Generator函数
-    0
 
 async函数  =>  Generator函数的语法糖
     0
