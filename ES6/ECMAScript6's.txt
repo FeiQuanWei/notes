@@ -584,7 +584,7 @@ Symbol  =>  ES6中新增的第七种数据类型，表示独一无二的值，�
         注：Symbol 值作为对象属性名时，不能用点运算符
 
     6、属性名的遍历
-        ymbol 作为属性名，该属性不会出现在for...in、for...of循环中，也不会被Object.keys()、Object.getOwnPropertyNames()、JSON.stringify()返回。
+        Symbol 作为属性名，该属性不会出现在for...in、for...of循环中，也不会被Object.keys()、Object.getOwnPropertyNames()、JSON.stringify()返回。
         但是，它也不是私有属性，有一个Object.getOwnPropertySymbols方法，可以获取指定对象的所有 Symbol 属性名
 
         Object.getOwnPropertySymbols方法返回一个数组，成员是当前对象的所有用作属性名的 Symbol 值。
@@ -629,7 +629,49 @@ Symbol  =>  ES6中新增的第七种数据类型，表示独一无二的值，�
                 arr[Symbol.isConcatSpreadable] = false
                 arr1.concat([5,6,7,8])  =>  [1,2,3,4,Symbol(Symbol.isConcatSpreadable):false,[5,6,7,8]]
         
-        ③、
+        ③、Symbol.species
+        ④、Symbol.match(str)  =>  对象的Symbol.match属性，指向一个函数。当执行str.match(myObject)时，Symbol.match会被调用
+            参数：str
+                str为调用match的字符串对象
+            eg:    
+                class MyMatcher {
+                    [Symbol.match](string) {
+                        return 'hello world'.indexOf(string);
+                    }
+                }
+                'e'.match(new MyMatcher()) // 1
+
+        ⑤、Symbol.replace(arg1,arg2)  =>  当搜索字符串对象被String.prototype.replace方法调用时，会返回该方法的返回值
+            参数：两个参数
+                arg1  =>  replace方法正在作用的字符串
+                arg2  =>  替换后的值
+            eg：   
+                class asdf{
+                    [Symbol.replace](...arg){
+                        console.log(arg)
+                    }
+                }
+                'hello'.replace(new asdf(),'word')  =>  ['hello','word']
+
+        ⑥、Symbol.search  =>  当对象被String.prototype.search方法调用时，会返回该方法的返回值
+            参数：arg1
+                arg1  =>  search方法正在作用的字符串
+
+            class asdf{
+                [Symbol.replace](...arg){
+                    console.log(arg)
+                }
+            }
+            'hello'.search(new asdf())  =>  ['hello','word']
+
+        ⑦、Symbol.split  =>  当对象被String.prototype.split方法调用时，会返回该方法的返回值
+            参数：
+                0
+
+        ⑧、
+        ⑨、
+        ⑩、
+        ⑪、
 
 Generator函数
     0
