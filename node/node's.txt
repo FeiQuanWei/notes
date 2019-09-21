@@ -64,7 +64,7 @@ fs(文件读取模块)
       }
     });
     console.log('read over')
-  
+
   打开文件
     fs.open(path,flags[,mode],callback)
       path  =>  打开文件的路径
@@ -95,13 +95,13 @@ fs(文件读取模块)
           stats.isSymbolicLink
           stats.isFIFO
           stats.isSocket
-    
+
     fs.writeFile(filename,data[,options],callback)
       创建并写入文件，如果文件存在，则覆盖原文件，如果向已经存在的文件内写入，使用其他方法
       filename  =>  文件路径
       data  =>  写入文件的数据
       options  =>  {encoding,mode,flag} 默认编码为utf8,模式为八进制模式，flag为w
-  
+
   阅读文件  =>  此方法使用文件描述符来读取文件，如果想直接使用文件名读取文件则使用其他方法
     fs.readFile(fd,buffer,offset,length,position,callback)
       fd  =>  fs.open()返回的文件描述符
@@ -115,13 +115,13 @@ fs(文件读取模块)
     fs.close(fd,callback);
       fd  =>  这是文件fs.open（）方法返回的文件描述符。
       callback(err)
-  
+
   截断文件
     fs.ftruncate(fd, len, callback)
       fd  =>  这是fs.open（）返回的文件描述符。
       len  =>  这是文件的长度，之后文件将被截断
       callback(err)
-  
+
   删除文件
     fs.unlink(path,callback)
       path  =>  这是包含路径的文件名。
