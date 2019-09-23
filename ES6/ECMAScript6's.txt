@@ -666,15 +666,23 @@ Symbol  =>  ES6中新增的第七种数据类型，表示独一无二的值，�
 
         ⑦、Symbol.split  =>  当对象被String.prototype.split方法调用时，会返回该方法的返回值
             参数：
-                0
+            eg：
+                class asdf{
+                    constructure(value){
+                        this.value = value     value  =>  Symbol值的属性描述
+                    }
+                    [Symbol.split](string){  string  =>  split方法作用于的字符串
+                        return ...
+                    }
+                }
+                'asdfasdf'.split(new asdf('a'))
 
-        ⑧、
-        ⑨、
-        ⑩、
-        ⑪、
+        ⑧、Symbol.iterator  =>  指向该对象的默认遍历器方法
+        ⑨、Symbol.toPrimitive  =>  该对象被转为原始类型的值时，会调用这个方法，返回该对象对应的原始类型值
+        ⑩、Symbol.toStringTag  =>  
+        ⑪、Symbol.unscopables
 
-Generator函数
-    0
+
 
 Proxy预处理
     增强对象和函数
@@ -892,9 +900,38 @@ Proxy预处理
     17、this问题
         0
 
+class  =>  作为对象的模板，通过class关键字，可以定义类。语法糖，让对象原型的写法更加清晰、更像面向对象编程的语法。
+    声明方式：
+        class cla{
+            getName(name){
+                console.log(name)
+            }   => 这块不能像对象那样写,
+            getAge(age){
+                console.log(age)
+            }
+            contructor(a,b){
+                this.a = a;
+                this.b = b;
+            }
+            add(){
+                console.log(this.a + this.b);
+            }
+        }
+    调用方式：
+        let cla1 = new cla();
+        cla1.getName("asdf");  =>  "asdf"
+    
+    像类中传参，通过contructor
+        let cla2 = new cla(1,2);
+        cla2.add();  =>  3
+    
+    类的继承
+        class cla3 extends cla{}
+        let cla4 = new cla3()
+        cla4.getName("asdf")  =>  "asdf"
 
-
-
+Generator函数
+    0
 
 async函数  =>  Generator函数的语法糖
     0
@@ -947,35 +984,7 @@ promist语法
         });
         因为p1执行的速度快，所以先返回，那么p2执行的结果将被遗弃
 
-class  =>  语法糖，让对象原型的写法更加清晰、更像面向对象编程的语法
-    声明方式：
-        class cla{
-            getName(name){
-                console.log(name)
-            }   => 这块不能像对象那样写,
-            getAge(age){
-                console.log(age)
-            }
-            contructor(a,b){
-                this.a = a;
-                this.b = b;
-            }
-            add(){
-                console.log(this.a + this.b);
-            }
-        }
-    调用方式：
-        let cla1 = new cla();
-        cla1.getName("asdf");  =>  "asdf"
-    
-    像类中传参，通过contructor
-        let cla2 = new cla(1,2);
-        cla2.add();  =>  3
-    
-    类的继承
-        class cla3 extends cla{}
-        let cla4 = new cla3()
-        cla4.getName("asdf")  =>  "asdf"
+
 
 Set
     ES6中新的数据类型，只存储key，不存储value
