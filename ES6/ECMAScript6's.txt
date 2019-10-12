@@ -1,6 +1,10 @@
 语法糖
     在程序中增加了某种语法，这种语法对程序的编译不会造成影响，更加方便程序员使用，增强了语法的可读性，减少代码的出错率
 
+super关键字
+    this关键字指向的是当前对象
+    super关键字指向的是当前对象的原型对象
+
 for..in 、 for..of和forEach的区别
     使用方法
         遍历数组
@@ -925,10 +929,85 @@ class  =>  作为对象的模板，通过class关键字，可以定义类。语�
         let cla2 = new cla(1,2);
         cla2.add();  =>  3
     
+    取值函数（getter）和存值函数（setter
+        eg:
+            class asdf{
+                constructor(){
+
+                }
+                get prop(){
+                    console.log('get函数')
+                }
+                set prop(val){
+                    console.log('set函数'+val)
+                }
+            }
+            let aaa = new asdf()
+            aaa.prop = 123   =>  set函数
+
+    属性表达式
+        eg:
+            let methodName = 'getArea';
+            class Square {
+                constructor(length) {
+                    // ...
+                }
+                [methodName]() {
+                    // ...
+                }
+            }
+
+    class表达式
+        eg:
+            let myClass = class Me{
+                getMyName(){
+                    return Me.name
+                }
+            }
+            这个类的名字时Me，到那时Me只能在class的内部使用，在class外部只能使用类的实例
+            myClass.getMyName();  =>  Me
+            如果class的内部没有使用到类的名字的话，可以进行如下定义
+            eg:
+                let myClass = class{
+                    getMyName(){
+                        return Me.name
+                    }
+                }
+
+
     类的继承
-        class cla3 extends cla{}
-        let cla4 = new cla3()
-        cla4.getName("asdf")  =>  "asdf"
+        class cls1{
+            getName(){
+                return cls1.name
+            }
+        }
+        let cls2 extends cls1{}
+    
+    this指向
+        class内部的this指向的是class的实例，如果将这个方法提取出来单独使用，this会指向该方法运行时所在的环境
+
+    静态方法  =>  类中定义的方法，都会被实例继承。如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用
+        eg:
+            class foo{
+                static say(){
+                    console.log('hello world')
+                }
+            }
+            foo.say();  =>  hello world
+            let foo1 = new foo()
+            foo1.say();  =>  error:foo1.say is not a function
+
+        注：①父类的静态方法可以被子类继承
+            ②静态方法可以与非静态方法重名
+
+    实例的属性  =>  不仅可以定义在class的constructor中，也可以定义在类的最顶层
+        eg；
+            class foo{
+                count = 0;
+                static add(){
+                    console.log(this.count++)
+                }
+            }
 
 Generator函数
     0
