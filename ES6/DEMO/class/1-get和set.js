@@ -10,5 +10,5 @@ class cla{
   }
 }
 let cl = new cla()
-cl.prop = 123
+// cl.prop = 123
 cl.prop

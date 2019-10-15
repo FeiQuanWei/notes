@@ -1,10 +1,12 @@
-class foo{
-  count = 1;
-  get value(){
-    return this.count;
+class IncreasingCounter {
+  #count = 0;
+  get aaa() {
+    console.log('Getting the current value!');
+    return this.#count;
   }
-  add(){
-    console.log(this.count++)
+  increment() {
+    this.#count++;
   }
 }
-console.log(foo.value)
+let asdf = new IncreasingCounter()
+console.log(asdf.aaa)
