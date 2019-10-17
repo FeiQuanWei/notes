@@ -7,6 +7,7 @@ function* asdf(){
   return 'ending';
 }
 let lf = asdf()
+console.log(lf)
 console.log(lf.next())
 console.log(lf.next())
 console.log(lf.next())
