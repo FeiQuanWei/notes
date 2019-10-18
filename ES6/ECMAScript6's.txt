@@ -1070,6 +1070,9 @@ iterator和for...of
         ③、yield*  =>  yield*后面跟的是一个可遍历的结构，它会调用该结构的遍历器接口
         ④、
 
+    字符串的iterator接口
+        0
+
 Generator函数
     从语法理解，Generator是一个状态机，封装了多个内部状态
     Generator 函数会返回一个遍历器对象。
