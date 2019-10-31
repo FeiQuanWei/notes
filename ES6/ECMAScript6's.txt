@@ -1092,11 +1092,32 @@ iterator和for...of
             ①、return方法的使用场合是，如果for...of循环提前退出（通常是因为出错，或者有break语句），就会调用return方法
             ②、一个对象在完成遍历前，需要清理或释放资源，就可以部署return方法
 
+    for...of循环
+        eg；
+            for(let [index,value]/value of arr/obj){
+                console.log(index)
+                console.log(index+value)
+            }
+            for(let key in arr/obj){
+                console.log(key)
+            }
+        ①、循环对象时使用for...in，循环数组时，使用for...of
+        ②、for...in循环出来的是key，for...of循环出来的是value
+        ③、for...of是ES6新引入的特性。修复了ES5引入的for...in的不足
+        ④、for...of不能循环普通的对象，需要通过和Object.keys()搭配使用
+
+
 Generator函数
     从语法理解，Generator是一个状态机，封装了多个内部状态
     Generator 函数会返回一个遍历器对象。
     Generator 函数除了状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态
 
+    yield表达式如果用在另一个表达式之中，必须放在圆括号里面
+        eg:console.log(1+(yield 123))
+
+    与 Iterator 接口的关系
+        0
+        
 async函数  =>  Generator函数的语法糖
     0
 
