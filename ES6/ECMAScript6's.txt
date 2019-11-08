@@ -1170,7 +1170,6 @@ promist语法
         因为p1执行的速度快，所以先返回，那么p2执行的结果将被遗弃
 
 
-
 Set
     ES6中新的数据类型，只存储key，不存储value
     *初始化Set()需要一个数据或空
@@ -1178,4 +1177,4 @@ Set
     set.add(key);
     set.delete(key);
 
-https://www.tutorialspoint.com/index.htm
+https://www.tutorialspoint.com/index.html
