@@ -85,6 +85,11 @@ apply和call的区别
   同步：客户端发送请求后，在服务器端返回响应之前，客户端处于等待状态，
   异步：客户端发送请求后，在服务器端返回响应之前，客户端可以进行其他操作
 
+jsonp原理
+  并不是发送了一个ajax请求，而是动态创建了一个script标签(script标签没有同源策略限制，可以跨域的)，将script标签的src
+  指向我们请求的服务器端地址，
+  与正常src地址的不同，动态script标签的src的结尾处多个参数callback=a
+
 原生ajax
   //1.创建ajax对象
   var xmlHttp = null;
