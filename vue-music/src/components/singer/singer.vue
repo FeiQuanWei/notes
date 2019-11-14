@@ -1,6 +1,6 @@
 <template>
-  <div>
-    歌手
+  <div class="singer">
+    <list-view :data="singers"></list-view>
   </div>
 </template>
 
@@ -8,9 +8,13 @@
 import {getSingerList} from '@/api/singer'
 import {ERR_OK} from '@/api/config'
 import Singer from 'common/js/singer'
+import ListView from '@/base/listview/listview'
 const HOT_NAME = '热门'
 const HOT_SINGER_LENGTH = 10
 export default {
+  components: {
+    ListView
+  },
   data () {
     return {
       singers: []
@@ -23,9 +27,7 @@ export default {
     _getSingerList() {
       getSingerList().then((res) => {
         if (res.code === ERR_OK) {
-          // console.log(res.data.list)
-          this.singers = res.data.list
-          this._normalizeSinger(this.singers)
+          this.singers = this._normalizeSinger(res.data.list)
         }
       })
     },
@@ -40,7 +42,8 @@ export default {
         if (index < HOT_SINGER_LENGTH) {
           map.hot.items.push(new Singer({
             id: item.Fsinger_id,
-            name: item.Fsinger_name
+            name: item.Fsinger_name,
+            mid: item.Fsinger_mid
           }))
         }
         const key = item.Findex
@@ -52,7 +55,8 @@ export default {
         }
         map[key].items.push(new Singer({
           id: item.Fsinger_id,
-          name: item.Fsinger_name
+          name: item.Fsinger_name,
+          mid: item.Fsinger_mid
         }))
       })
       let hot = []
@@ -68,8 +72,6 @@ export default {
       ret.sort((a, b) => {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0)
       })
-      console.log(hot)
-      console.log(ret)
       return hot.concat(ret)
     }
   }
@@ -77,12 +79,9 @@ export default {
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  @import "~common/stylus/variable"
-  .loading
+  .singer
+    position: fixed
+    top: 88px
+    bottom: 0
     width: 100%
-    text-align: center
-    .desc
-      line-height: 20px
-      font-size: $font-size-small
-      color: $color-text-l
 </style>
