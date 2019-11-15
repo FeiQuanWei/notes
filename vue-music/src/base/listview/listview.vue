@@ -10,14 +10,18 @@
       <li class="list-group" v-for="(group,index1) in data" :key="index1" ref="listGroup">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="(item,index2) in group.items" :key="index2" class="list-group-item">
+          <li @click="selectItem(item)" v-for="(item,index2) in group.items" :key="index2" class="list-group-item">
             <img v-lazy="item.avator" class="avator">
             <span class="name">{{item.name}}</span>
           </li>
         </ul>
       </li>
     </ul>
-    <div class="list-shortcut" @touchstart="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove">
+    <div
+      class="list-shortcut"
+      @touchstart="onShortcutTouchStart"
+      @touchmove.stop.prevent="onShortcutTouchMove"
+    >
       <ul>
         <li v-for="(item,index) in shortcutList"
           class="item"
@@ -27,6 +31,9 @@
           {{item}}
         </li>
       </ul>
+    </div>
+    <div class="list-fixed" v-show="fixedTitle">
+      <h1 class="fixed-title">{{fixedTitle}}</h1>
     </div>
   </scroll>
 </template>
@@ -56,6 +63,12 @@ export default {
       return this.data.map((group) => {
         return group.title.substr(0, 1)
       })
+    },
+    fixedTitle() {
+      if (this.scrollY > 0) {
+        return
+      }
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
     }
   },
   created() {
@@ -65,6 +78,9 @@ export default {
     this.probeType = 3
   },
   methods: {
+    selectItem(item) {
+      this.$emit('select', item)
+    },
     onShortcutTouchStart(e) {
       let anchorIndex = getData(e.target, 'index')
       let firstTouch = e.touches[0]
