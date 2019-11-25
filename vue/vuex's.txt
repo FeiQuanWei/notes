@@ -1,3 +1,5 @@
+https://github.com/vuejs/awesome-vue#official-resources
+http://vue.awesometiny.com/  -- vueUI框架
 什么是VUEX
     vue的状态管理器
 
