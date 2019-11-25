@@ -123,7 +123,6 @@ export default {
       this.$refs.cdwrapper.addEventListener('transitionend', done)
     },
     afterLeave() {
-      console.log(1)
       this.$refs.cdwrapper.style.transition = ''
       this.$refs.cdwrapper.style[TRANSFORM] = ''
     },
