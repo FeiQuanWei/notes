@@ -35,7 +35,7 @@
           </div>
           <div class="operators">
             <div class="icon i-left">
-              <i class="icon-sequence"></i>
+              <i :class="iconMode" @click="changeMode"></i>
             </div>
             <div class="icon i-left" :class="disableCls">
               <i @click="prev" class="icon-prev"></i>
@@ -63,7 +63,9 @@
           <h2 class="desc" v-html="currentSong.singer"></h2>
         </div>
         <div class="control">
-          <i @click="togglePlaying" :class="miniIcon"></i>
+          <progressCircle :radius="raduis" :percent="percent">
+            <i @click="togglePlaying" class="icon-mini" :class="miniIcon"></i>
+          </progressCircle>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
@@ -79,19 +81,23 @@ import {mapGetters, mapMutations} from 'vuex'
 import animations from 'create-keyframe-animation'
 import {prefixStyle} from 'common/js/dom'
 import progressBar from '@/base/progress-bar/progress-bar'
+import progressCircle from '@/base/progress-circle/progress-circle'
+import {playMode} from 'common/js/config'
+import {shuffle} from 'common/js/util'
 const TRANSFORM = prefixStyle('transform')
 export default {
   data() {
     return {
       songReady: false,
-      currentTime: 0
+      currentTime: 0,
+      raduis: 32
     }
   },
   created() {},
   mounted() {},
   props: {},
   components: {
-    progressBar
+    progressBar, progressCircle
   },
   computed: {
     playIcon() {
@@ -109,7 +115,18 @@ export default {
     percent() {
       return this.currentTime / this.currentSong.duration
     },
-    ...mapGetters(['fullScreen', 'playList', 'currentSong', 'playing', 'currentIndex'])
+    iconMode() {
+      return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+    },
+    ...mapGetters([
+      'fullScreen',
+      'playList',
+      'currentSong',
+      'playing',
+      'currentIndex',
+      'mode',
+      'sequenceList'
+    ])
   },
   watch: {
     currentSong() {
@@ -233,6 +250,16 @@ export default {
         this.togglePlaying()
       }
     },
+    changeMode() {
+      const mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+      let list = null
+      if (mode === playMode.random) {
+        list = shuffle(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+    },
     _pad(num, n = 2) {
       let len = num.toString().length
       while (len < n) {
@@ -244,7 +271,8 @@ export default {
     ...mapMutations({
       setFullScreen: 'SET_FULLSCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX'
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayMode: 'SET_PLAYING_MODE'
     })
   }
 }
