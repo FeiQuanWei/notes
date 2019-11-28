@@ -72,7 +72,7 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime" :src="currentSong.url"></audio>
+    <audio @ended="end" ref="audio" @canplay="ready" @error="error" @timeupdate="updateTime" :src="currentSong.url"></audio>
   </div>
 </template>
 
@@ -129,7 +129,10 @@ export default {
     ])
   },
   watch: {
-    currentSong() {
+    currentSong(newSong, currentSong) {
+      if (newSong.id === currentSong.id) {
+        return
+      }
       this.$nextTick(() => {
         this.$refs.audio.play()
       })
@@ -237,6 +240,17 @@ export default {
     },
     updateTime(e) {
       this.currentTime = e.target.currentTime
+    },
+    end() {
+      if (this.mode === playMode.loop) {
+        this.loop()
+      }else{
+        this.next()
+      }
+    },
+    loop() {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
     },
     format(interval) {
       interval = interval | 0
