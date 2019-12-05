@@ -1114,7 +1114,7 @@ Generator函数
         0
         
 async函数  =>  Generator函数的语法糖
-    0
+    async如果遇到await就会等待，等待其执行结果，才会往下继续执行函数内部语句
 
 promist语法
     new promist((resolve,reject)={
