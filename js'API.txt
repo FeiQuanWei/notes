@@ -37,6 +37,7 @@
         set(val){
         }
     })
+
     Object.getOwnPropertyDescriptor(obj,prop);
         返回对象指定属性的属性描述符(对象)
         eg：
@@ -74,8 +75,21 @@
     str.split('symbol');
         以symbol为分隔符将str变成数组，改变原数据
     
-    String.fromCharCode('码点')
-        从码点返回对应字符。
+    str.startwith('str1');  => 判断字符串str是否已str1开头
+
+    str.sendwith('str1');  => 判断字符串str是否已str1结尾
+
+    str.include('str1');  =>  判断字符串str是否含有str1
+
+    str.repeat(num);  =>  将字符串str复制num次
+
+    str.padStart('','');  => 头补全，返回新数组，第一个参数的最小长度，第二个参数为用来补全的字符
+        eg:'2222'.padStart(10,'1');  =>  1111112222
+
+    str.padStart('','');  => 尾补全，返回新数组，第一个参数的最小长度，第二个参数为用来补全的字符
+        eg:'2222'.padStart(10,'1');  =>  2222111111
+
+    String.fromCharCode('码点');  =>  从码点返回对应字符。
 
     String.match(regexp或"value")
         从字符串中检索到与字符匹配或者与正则匹配的值,返回结果数组，不是下标
@@ -127,8 +141,13 @@
             })
             _sdArr  result=> [5]
             返回数组中大于4的值，返回的是由符合条件的值组成的数组
+
     _.shuffle(Array);   打乱数组的排序，返回一个新数组
+
     arr0.concat(arr1,arr2,arr3,arr4)  =>  将arr0与arr1,arr2,arr3,arr4合并，并返回一个新数组
+
+    arr1.fill('1'[start[,end]]);  =>  使用固定的值替换数组中指定下标的内容，包含start，不包含end
+        eg: [1,2,3,4,5].fill('a',2,4);  =>  [1,2]
 
 Number
     Number.toFixed(num)  四舍五入，取小数点后几位，返回新值，原变量不改变
@@ -137,7 +156,7 @@ Number
     Number.isInteger(value)
         判断是否为整数，返回boolean
         
-其他API
+Math
     Math.floor(number);  
         向下取整 25.6=>25
 
@@ -147,44 +166,50 @@ Number
     Math.ceil(number);  
         向上取整 25.1=>26
 
-    音频audio对象API及property
-        var obj = document.getElementByTagName(audio);
+    Math.min();  => 
 
-        API
-            ①obj.play();音频播放
-            ②obj.pause();音频暂停
-            ③obj.load();重新加载音视频标签  
-            ④ended  eg:obj.addEventListener('ended',function(){})  当前音乐播放完成后调用
-            ⑤error  eg:obj.addEventListener('error',function(){})  当前音乐播放发生错误后调用
-            ⑥loadeddata  eg:obj.addEventListener('loadeddata',function(){})  当加载媒体数据时调用
-            ⑦playing  eg:obj.addEventListener('playing',function(){})  当媒体从因缓冲而引起的暂停和停止恢复到播放时产生该事件
-
-        property
-            ①autoplay  value:autoplay  eg:<autio autoplay='autoplay'></autio>  媒体加载后自动播放   
-            ②controls  value:autoplay  eg:<autio autoplay='autoplay'></autio>  显示播控控件
-            ③currentSrc  obj.currentSrc=>返回当前媒体的URL
-            ④currentTime  obj.currentTime=>当前播放的时间，单位秒
-            ⑤duration  obj.duration=>返回媒体的播放总时长，单位秒
-            ⑥ended  obj.ended=>返回当前播放是否结束标志
-            ⑦loop  value:loop  eg:<autio loop='loop'></autio>  是否循环播放
-            ⑧preload  value:auto、meta、none  eg:<autio value='auto、meta、none'></autio>  规定是否预加载音频
-                auto - 当页面加载后载入整个音频
-                meta - 当页面加载后只载入元数据
-                none - 当页面加载后不载入音频
-            ⑨volume  obj.volume  value:0-1  音量
-
-    jQuery和DOM对象相互转换
-        jquery对象=>DOM
-            var $li = $("li")[0];  
-            var $li = $("li").get(0);
-        DOM=>jquery对象
-            var div = document.getElementsByTagName('div'); //dom对象
-            var $div = $(div); //jQuery对象
-    
     Math.log(num)
         返回一个自然数的基数
     
     Math.pow(2,53); 2的53次方
+
+    Math.min(...arg);  =>  返回参数中的最小值
+
+音频audio对象API及property
+    var obj = document.getElementByTagName(audio);
+
+    API
+        ①obj.play();音频播放
+        ②obj.pause();音频暂停
+        ③obj.load();重新加载音视频标签  
+        ④ended  eg:obj.addEventListener('ended',function(){})  当前音乐播放完成后调用
+        ⑤error  eg:obj.addEventListener('error',function(){})  当前音乐播放发生错误后调用
+        ⑥loadeddata  eg:obj.addEventListener('loadeddata',function(){})  当加载媒体数据时调用
+        ⑦playing  eg:obj.addEventListener('playing',function(){})  当媒体从因缓冲而引起的暂停和停止恢复到播放时产生该事件
+
+    property
+        ①autoplay  value:autoplay  eg:<autio autoplay='autoplay'></autio>  媒体加载后自动播放   
+        ②controls  value:autoplay  eg:<autio autoplay='autoplay'></autio>  显示播控控件
+        ③currentSrc  obj.currentSrc=>返回当前媒体的URL
+        ④currentTime  obj.currentTime=>当前播放的时间，单位秒
+        ⑤duration  obj.duration=>返回媒体的播放总时长，单位秒
+        ⑥ended  obj.ended=>返回当前播放是否结束标志
+        ⑦loop  value:loop  eg:<autio loop='loop'></autio>  是否循环播放
+        ⑧preload  value:auto、meta、none  eg:<autio value='auto、meta、none'></autio>  规定是否预加载音频
+            auto - 当页面加载后载入整个音频
+            meta - 当页面加载后只载入元数据
+            none - 当页面加载后不载入音频
+        ⑨volume  obj.volume  value:0-1  音量
+
+jQuery和DOM对象相互转换
+    jquery对象=>DOM
+        var $li = $("li")[0];  
+        var $li = $("li").get(0);
+    DOM=>jquery对象
+        var div = document.getElementsByTagName('div'); //dom对象
+        var $div = $(div); //jQuery对象
+    
+
 
 
 
