@@ -1,0 +1,68 @@
+类型断言 => 不是类型转换
+    <Type>variable
+    value as type
+
+声明数组的类型
+    1、『 type:[] 』 声明法
+        let arr1:number[] = [1,2,3]  =>  声明一个元素只能是数字类型的数组
+    2、泛型数组
+        let arr1:Array<number>  =>  声明一个元素只能是数字类型的数组
+    3、any  =>   any 表示数组中允许出现任意类型
+        let arr1:any[] = ['Xcat Liu', 25, { website: 'http://xcatliu.com' }]
+
+函数的声明
+    ①function sum(x: number, y: number): number {
+         return x + y;
+     }
+     声明函数sum，函数返回值为number类型
+
+    ②let mySum: (x: number, y: number) => 
+        number = function (x: number, y: number): number {
+            return x + y;
+        };
+
+接口中函数的定义
+    eg:
+        interface SearchFunc {
+            (source: string, subString: string): boolean;
+        }
+        let mySearch: SearchFunc;
+        mySearch = function(source: string, subString: string) {
+            return source.search(subString) !== -1;
+        }
+
+可选参数  =>  可选参数必须跟在必选参数的后面
+    eg:
+        function fun1(a:string, b?:number):(string|number) {
+            if(b){
+                return b
+            }else{
+                return a
+            }
+        }
+
+参数默认值
+    function buildName(firstName: string, lastName: string = 'Liu') {
+        return firstName + ' ' + lastName;
+    }
+
+剩余参数
+    ①eg:
+        function push(array, ...items) {}
+        let a = [];
+        push(a, 1, 2, 3);
+    
+    ②eg:
+        function push(array: any[], ...items: any[]) {}
+        let a = [];
+        push(a, 1, 2, 3);
+
+可索引的类型
+    eg:
+        interface StringArray {
+            [index: number]: string;
+        }
+        let myArray = StringArray
+        myArray = ["Bob", "Fred"];
+        let myStr: string = myArray[0];
+    其中index为索引，类型为number，当使用index进行索引时，会返回一个string类型的值

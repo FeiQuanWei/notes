@@ -1,4 +1,6 @@
 {
     "python.autoComplete.addBrackets": true,
     "git.ignoreLimitWarning": true,
+    "editor.fontSize": 20,
+    "editor.fontLigatures": true
 }

@@ -1,6 +1,5 @@
 class cla{
   constructor(){
-
   }
   get prop(){
     console.log('get函数')

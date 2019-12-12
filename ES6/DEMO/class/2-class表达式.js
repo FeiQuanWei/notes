@@ -6,5 +6,10 @@ class myclass{
     return myclass.name
   }
 }
-let me = new myclass()
-console.log(me.getMyName())
+class asf extends myclass {
+
+}
+console.log(myclass)
+console.log(asf)
+// let me = new myclass()
+// console.log(me.getMyName())

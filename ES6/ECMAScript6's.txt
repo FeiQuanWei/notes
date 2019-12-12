@@ -802,7 +802,6 @@ Proxy预处理
             }
         })
         
-
     8、deleteProperty()  =>  用于拦截delete操作,如果这个方法抛出错误或者返回false，当前属性就无法被delete命令删除
         参数:target、key
             target  =>  目标对象
@@ -969,7 +968,16 @@ class  =>  作为对象的模板，通过class关键字，可以定义类。语�
                         return Me.name
                     }
                 }
-
+        2、立即执行的表达式
+            let person = class Me {
+                construct(name) {
+                    this.name = name
+                }
+                sayName(){
+                    console.log(this.name)
+                }
+            }('张三')
+            person.sayName(); => 张三
 
     类的继承
         class cls1{
@@ -1113,11 +1121,21 @@ Generator函数
     与 Iterator 接口的关系
         0
         
-async函数  =>  Generator函数的语法糖
-    async如果遇到await就会等待，等待其执行结果，才会往下继续执行函数内部语句
+async函数  =>  Generator函数的语法糖，表明函数内部有异步操作
+    1、声明
+        相当于替换了gengrator函数的 * 
+            function* add(){}
+            async function add(){}
+
+    2、返回promise对象
+        async函数会返回一个promise对象，而async的返回值会直接变成then方法回调函数的参数
+    
+    3、await命令
+        =
+
 
 promist语法
-    new promist((resolve,reject)={
+    new promist((resolve,reject)=>{
         do somthing...
         if(success){
             resolve(property1)

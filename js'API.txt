@@ -61,7 +61,6 @@
     
     Object.key(obj)  =>  返回一个有对象本身可枚举的属性组成的数组
     
-
 字符串api
     str.slice(startIndex,endIndex) 截取字符串，返回新值，原变量不改变
         startIndex开始位置下标，endIndex结束位置下标，截取字符串不包括结束位置的字符
@@ -174,6 +173,8 @@ Math
     Math.pow(2,53); 2的53次方
 
     Math.min(...arg);  =>  返回参数中的最小值
+
+    Math.abs(x) => 返回一个数字的绝对值
 
 音频audio对象API及property
     var obj = document.getElementByTagName(audio);

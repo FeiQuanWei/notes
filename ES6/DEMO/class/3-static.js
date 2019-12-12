@@ -3,6 +3,11 @@ class foo{
     console.log('hello world')
   }
 }
-foo.say()
-let foo1 = new foo()
-foo1.say()
+class asdf extends foo{
+
+}
+// foo.say()
+console.log(asdf)
+console.log(foo)
+// let foo1 = new foo()
+// foo1.say()
