@@ -230,7 +230,13 @@ jQuery和DOM对象相互转换
         var div = document.getElementsByTagName('div'); //dom对象
         var $div = $(div); //jQuery对象
     
-
+正则
+    + => 代表前面的字符必须至少出现一次（1次或多次）
+        runoo+b，可以匹配 runoob、runooob、runoooooob 
+    * => 可以不出现，也可以出现一次或者多次
+        runoo*b，可以匹配 runob、runoob、runoooooob
+    ? => 代表前面的字符最多只可以出现一次（0次、或1次）
+        colou?r，可以匹配 color 或者 colour
 
 
 

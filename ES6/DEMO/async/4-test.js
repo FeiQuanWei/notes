@@ -1,7 +1,6 @@
-async function timeout(ms) {
-  await new Promise((resolve) => {
+function timeout(ms) {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
-  }).then(()=>{
     console.log(1)
   });
 }
@@ -11,4 +10,4 @@ async function asyncPrint(value, ms) {
   console.log(value);
 }
 
-asyncPrint('hello world', 50);
+asyncPrint('hello world', 5000);

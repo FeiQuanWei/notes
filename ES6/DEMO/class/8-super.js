@@ -1,15 +1,19 @@
 class foo{
-  constructor(a,b){
-    console.log(a+b)
+  constructor(){
+    this.x = 2
   }
-  add(){
-    console.log('function of parent')
+  print(){
+    console.log(this)
   }
 }
 class foo1 extends foo{
-  constructor(){
-    super(1,2)
-    super.add()
+  constructor(x){
+    super()
+    this.x = x
+  }
+  asdf(){
+    super.print()
   }
 }
-let foo1_1 = new foo1()
+let foo1_1 = new foo1(4)
+foo1_1.asdf()
